@@ -1,0 +1,929 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Creating Tiles | Introduction</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.3.0">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="gitbook/style.css">
+    
+    
+
+        
+    
+    
+    <link rel="next" href="./Practice/PracticeCh6.html" />
+    
+    
+    <link rel="prev" href="./Chapter3.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="4" data-basepath="." data-revision="Fri Sep 04 2015 12:27:03 GMT-0700 (Pacific Daylight Time)">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+        
+        
+        
+
+        
+
+        
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="./index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Introduction
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="Chapter1.html">
+            
+                
+                    <a href="./Chapter1.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Starting Out
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="GraphicsManager.html">
+            
+                
+                    <a href="./GraphicsManager.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        GraphicsManager
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="TextureManager.html">
+            
+                
+                    <a href="./TextureManager.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        TextureManager
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="InputManager.html">
+            
+                
+                    <a href="./InputManager.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        InputManager
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="AudioManager.html">
+            
+                
+                    <a href="./AudioManager.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.4.</b>
+                        
+                        SoundManager
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="Game.html">
+            
+                
+                    <a href="./Game.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.5.</b>
+                        
+                        Game
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="Program.html">
+            
+                
+                    <a href="./Program.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.6.</b>
+                        
+                        Program
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="Chapter2.html">
+            
+                
+                    <a href="./Chapter2.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Why Tiles?
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="Chapter3.html">
+            
+                
+                    <a href="./Chapter3.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Map Format
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="4" data-path="Chapter6.html">
+            
+                
+                    <a href="./Chapter6.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                        Creating Tiles
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1" data-path="Practice/PracticeCh6.html">
+            
+                
+                    <a href="./Practice/PracticeCh6.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                        On Your Own
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5" data-path="Chapter5.html">
+            
+                
+                    <a href="./Chapter5.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                        Map Tools
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="6" data-path="Chapter8.html">
+            
+                
+                    <a href="./Chapter8.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                        X The Hero
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="7" data-path="Chapter9.html">
+            
+                
+                    <a href="./Chapter9.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.</b>
+                        
+                        X Keys To Move
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="8" data-path="Chapter10.html">
+            
+                
+                    <a href="./Chapter10.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>8.</b>
+                        
+                        X Hit The Wall
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="9" data-path="Chapter11.html">
+            
+                
+                    <a href="./Chapter11.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>9.</b>
+                        
+                        X Open The Door
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="10" data-path="Chapter12.html">
+            
+                
+                    <a href="./Chapter12.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.</b>
+                        
+                        X Jumping
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="11" data-path="Chapter13.html">
+            
+                
+                    <a href="./Chapter13.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>11.</b>
+                        
+                        X Clouds
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="12" data-path="Chapter14.html">
+            
+                
+                    <a href="./Chapter14.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>12.</b>
+                        
+                        X Ladders
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="13" data-path="Chapter15.html">
+            
+                
+                    <a href="./Chapter15.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>13.</b>
+                        
+                        X Simple Enemy
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="14" data-path="Chapter16.html">
+            
+                
+                    <a href="./Chapter16.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>14.</b>
+                        
+                        X More Enemy
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="15" data-path="Chapter17.html">
+            
+                
+                    <a href="./Chapter17.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>15.</b>
+                        
+                        X Shooting
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="16" data-path="Chapter18.html">
+            
+                
+                    <a href="./Chapter18.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>16.</b>
+                        
+                        X Getting Items
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="17" data-path="Chapter19.html">
+            
+                
+                    <a href="./Chapter19.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.</b>
+                        
+                        X Moving Tiles
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="18" data-path="Chapter20.html">
+            
+                
+                    <a href="./Chapter20.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>18.</b>
+                        
+                        X Scrolling
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="19" data-path="Chapter21.html">
+            
+                
+                    <a href="./Chapter21.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>19.</b>
+                        
+                        X More Scrolling
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="20" data-path="Chapter22.html">
+            
+                
+                    <a href="./Chapter22.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>20.</b>
+                        
+                        X Depth
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="21" data-path="Chapter23.html">
+            
+                
+                    <a href="./Chapter23.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>21.</b>
+                        
+                        X Ismetric View
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="22" data-path="Chapter24.html">
+            
+                
+                    <a href="./Chapter24.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>22.</b>
+                        
+                        X Mouse To Move
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="23" data-path="Chapter25.html">
+            
+                
+                    <a href="./Chapter25.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>23.</b>
+                        
+                        X Iso Mouse
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="24" data-path="Chapter26.html">
+            
+                
+                    <a href="./Chapter26.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>24.</b>
+                        
+                        X Iso Scroll
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="25" data-path="Chapter27.html">
+            
+                
+                    <a href="./Chapter27.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>25.</b>
+                        
+                        X Rotating Hero
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="26" data-path="Chapter28.html">
+            
+                
+                    <a href="./Chapter28.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>26.</b>
+                        
+                        X Rotating Ground
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="27" data-path="Chapter29.html">
+            
+                
+                    <a href="./Chapter29.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>27.</b>
+                        
+                        X Slopes
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="28" data-path="Chapter30.html">
+            
+                
+                    <a href="./Chapter30.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>28.</b>
+                        
+                        X Hexagons
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="29" data-path="Chapter7.html">
+            
+                
+                    <a href="./Chapter7.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>29.</b>
+                        
+                        X More Tiles
+                    </a>
+            
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                Published with GitBook
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="./" >Introduction</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h1 id="creating-tiles">Creating Tiles</h1>
+<p>The last section left off with an open ended question. What&apos;s more important clean code and messy data, or messy code and clean data? Seeing how we&apos;re making a game, not a tool i would say having clean code take priority. Games are complicated beasts, it&apos;s hard enough to make a game when you write good code, let&apos;s not over complicate the code needed for the sake of data.</p>
+<h3 id="getting-the-assets">Getting the assets</h3>
+<p>I&apos;m going to be using <a href="Files/ZeldaTiles.zip">this zelda tile set</a> for the tutorial. Download it, and unzip the textures into your &quot;Assets&quot; directory. All of the sprite sheets in that folder are already a power of two.</p>
+<h3 id="new-project">New Project</h3>
+<p>Create a new project, call it <strong>CreatingTiles</strong> and make the standard window appear. Don&apos;t forget to set your working directory correctly. Follow this chapter along in this new solution.</p>
+<h3 id="tile-object">Tile Object</h3>
+<p>The first thing we need is a tile object. For now each object will have two properties, a sprite to display and a boolean to dictate if we can walk on it or not. In the future we will add properties to this tile definition as needed (eq: IsDestructable, IsHidden, etc...). The name of this class is going to simply be <code>Tile</code>:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">class</span> <span class="hljs-title">Tile</span> {
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> Sprite { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">private</span> <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> Rectangle Source { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">private</span> <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">bool</span> Walkable { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+
+    <span class="hljs-keyword">public</span> Point WorldPosition { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+    <span class="hljs-keyword">public</span> <span class="hljs-keyword">float</span> Scale { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Tile</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> spritePath, Rectangle sourceRect</span>) </span>{
+        Sprite = TextureManager.Instance.LoadTexture(spritePath);
+        Source = sourceRect;
+        Walkable = <span class="hljs-keyword">false</span>;
+        WorldPosition = <span class="hljs-keyword">new</span> Point(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+        Scale = <span class="hljs-number">1.0</span>f;
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Render</span>(<span class="hljs-params"></span>) </span>{
+        Point renderPosition = <span class="hljs-keyword">new</span> Point(WorldPosition.X, WorldPosition.Y);
+        renderPosition.X = (<span class="hljs-keyword">int</span>)(renderPosition.X * Scale);
+        renderPosition.Y = (<span class="hljs-keyword">int</span>)(renderPosition.Y * Scale);
+        TextureManager.Instance.Draw(Sprite, renderPosition, Scale, Source);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Destroy</span>(<span class="hljs-params"></span>) </span>{
+        TextureManager.Instance.UnloadTexture(Sprite);
+    }
+}
+</code></pre>
+<p>Lets see what the <strong>Variables</strong> do:</p>
+<ul>
+<li>Sprite - Once loaded, this is a reference to the sprite sheet we will be rendering</li>
+<li>Source - What section of the sprite sheet do we want to display</li>
+<li>Walkable - Can the player walk on this tile</li>
+<li>WorldPosition - What X / Y should the tile render a, this respects scale</li>
+<li>Scale - We might want to scale the tile to display on a larger screen<ul>
+<li>If we have a tile of size 16 at x position 2, it will draw at pixel 2 with a width of 16</li>
+<li>The same (width 16, x 2) with a scale of 2 it will render at piel 4 with a width of 32</li>
+</ul>
+</li>
+</ul>
+<p>The <strong>constructor</strong> takes the path to a sprite sheet and a rectangle of the subsprite that represents this tile. It sets the appropriate member variables, and sets the rest to defaults.</p>
+<p>Because the constructor called <code>LoadTexture</code> we must also call <code>UnloadTexture</code>. The <strong>Destroy</strong> method serves this purpose. Once the Tile is no longer needed the Destroy function should be called.</p>
+<p>The <strong>Render</strong> function is super simple, it just uses all the members we have to render the sprite. It&apos;s a simple wrapper for the <code>Draw</code> function of <em>TextureManager</em>. The only work render does is to account for scaling and world position.</p>
+<h3 id="map-data">Map Data</h3>
+<p>So now that we have the definition of what an individual tile is, let&apos;s see if we can make a map. The <code>map</code> should be in a game class, you should be able to figure out how to add a game instance to the window.</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">class</span> <span class="hljs-title">Game</span> {
+    <span class="hljs-keyword">protected</span> Tile[][] map = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">int</span>[][] mapLayout = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[][] {
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> },
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> }
+    };
+
+    <span class="hljs-comment">// Singleton (private static instance, public static getter, private constructor)</span>
+}
+</code></pre>
+<ul>
+<li><strong>map</strong>: a 2D array to hold runtime map information</li>
+<li><strong>mapLayout</strong>: Meta-data to hold an easily configurable map. <ul>
+<li>0&apos;s are walkable tiles</li>
+<li>1&apos;s are not walkable</li>
+</ul>
+</li>
+</ul>
+<p>As your game gets more and more complicated it may not be possible to store data in a simple representation like the one given above. I&apos;m going to try my best to keep things as simple as possible for the tutorial. </p>
+<p>Also take note that my game class is a singleton. You should make yours a singleton too, it will make hooking it up to the game window super easy.</p>
+<p>Now that we know what the map is going to look like, the next step is to actually load the map in! In order to create a tile object we need to know two things, the sprite sheet it&apos;s going to be on and the rectangle on that sheet. Before going any further, lets also add this meta-data to the game class</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">class</span> <span class="hljs-title">Game</span> {
+    <span class="hljs-keyword">protected</span> Tile[][] map = <span class="hljs-keyword">null</span>;
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">int</span>[][] mapLayout = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[][] {
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> },
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+        <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> }
+    };
+
+    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">string</span>[] spriteSheets = <span class="hljs-keyword">new</span> <span class="hljs-keyword">string</span>[] {
+        <span class="hljs-string">&quot;Assets/HouseTiles.png&quot;</span>,
+        <span class="hljs-string">&quot;Assets/HouseTiles.png&quot;</span>
+    };
+    <span class="hljs-keyword">protected</span> Rectangle[] spriteSources = <span class="hljs-keyword">new</span> Rectangle[] {
+        <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">466</span>,<span class="hljs-number">32</span>,<span class="hljs-number">30</span>,<span class="hljs-number">30</span>),
+        <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">466</span>,<span class="hljs-number">1</span>,<span class="hljs-number">30</span>,<span class="hljs-number">30</span>)
+    };
+}
+</code></pre>
+<p>Why did we add two arrays? Well, map layout refers to tiles by numbers, each number coresponds to an element in one of the new arrays we just created. Do we need the <code>spriteSheets</code> array? Not really. If we have a &quot;world map&quot; atlas that contains EVERY tile in the game, then the <code>spriteSheets</code> array is a lot of extra work. But what if we want tiles with a number <strong>5</strong> and above to come from an alternate sprite sheet? The <code>spriteSheets</code> array lets us do just that.</p>
+<h3 id="creating-the-map">Creating the Map</h3>
+<p>We now have all the information we need to build the map array. Some information like if a map is walkable or not is obvious, others like the X / Y location of a map we have to figure out. Let&apos;s create a helper function to create the map, and call said function in Initialize.</p>
+<pre><code class="lang-cs">Tile[][] GenerateMap(<span class="hljs-keyword">int</span>[][] layout, <span class="hljs-keyword">string</span>[] sheets, Rectangle[] sources) {
+    Tile[][] result = <span class="hljs-keyword">new</span> Tile[layout.Length][];
+    <span class="hljs-keyword">float</span> scale = <span class="hljs-number">1.0</span>f;
+
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; layout.Length; ++i) {
+        result[i] = <span class="hljs-keyword">new</span> Tile[layout[i].Length];
+
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; layout[i].Length; ++j) {
+            <span class="hljs-comment">// The 0&apos;s and i&apos;s in the layout array correspond to</span>
+            <span class="hljs-comment">// strings and rectangles in the sheets and sources arrays</span>
+            <span class="hljs-keyword">string</span> sheet = sheets[layout[i][j]];
+            Rectangle source = sources[layout[i][j]];
+
+            <span class="hljs-comment">// We don&apos;t have to take scale into account, but we do need</span>
+            <span class="hljs-comment">// to space our grid out accordingly. It might be smart to have</span>
+            <span class="hljs-comment">// a width and height that&apos;s a constant, right now we are assuming</span>
+            <span class="hljs-comment">// that all of the passed in rect&apos;s in sources will have a uniform size</span>
+            Point worldPosition = <span class="hljs-keyword">new</span> Point();
+            worldPosition.X = (<span class="hljs-keyword">int</span>)(j * source.Width);
+            worldPosition.Y = (<span class="hljs-keyword">int</span>)(i * source.Height);
+
+            result[i][j] = <span class="hljs-keyword">new</span> Tile(sheet, source);
+            result[i][j].Walkable = layout[i][j] == <span class="hljs-number">0</span>;
+            result[i][j].WorldPosition = worldPosition;
+            result[i][j].Scale = scale;
+        }
+    }
+
+    <span class="hljs-keyword">return</span> result;
+}
+
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Initialize</span>(<span class="hljs-params"></span>) </span>{
+    TextureManager.Instance.UseNearestFiltering = <span class="hljs-keyword">true</span>;
+    map = GenerateMap(mapLayout, spriteSheets, spriteSources);
+}
+</code></pre>
+<p>With <code>GenerateMap</code> containing all of the logic for initializing tiles you can imagine that it&apos;s going to get more complicated as your tiles get more complicated. This is the expected behaviour, it&apos;s just something to keep in mind. </p>
+<p>Initialize calls a method of TextureManager we have not talked about yet:</p>
+<pre><code>TextureManager.Instance.UseNearestFiltering = true;
+</code></pre><p>What does this do? Filtering is applied when an image is loaded. If filtering uses nearest, then everything resizes in a pixelated fashion. This is how you get pixel perfect images. If nearest filtering is NOT used then anti aliasing is applied to textures that are resized. This MAY cause blurry looking textures.</p>
+<h3 id="displaying-the-map">Displaying the Map</h3>
+<p>With all of that in place, i think we are ready to render our tiles! Because the tile class has a <code>Render</code> method that takes care of it&apos;s own rendering, this is going to be super simple. Inside the <strong>Game</strong> classes <code>Render</code> function just call <code>Render</code> on every tile:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Render</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> h = <span class="hljs-number">0</span>; h &lt; map.Length; ++h) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> w = <span class="hljs-number">0</span>; w &lt; map[h].Length; ++w) {
+            map[h][w].Render();
+        }
+    }
+}
+</code></pre>
+<p>The game should now look like this:</p>
+<p><img src="Images/sample1_new.PNG" width="408" height="325"></p>
+<h3 id="cleanup">Cleanup</h3>
+<p>Don&apos;t forget, each tile loaded a sprite, we must now unload these!</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Shutdown</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> h = <span class="hljs-number">0</span>; h &lt; map.Length; ++h) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> w = <span class="hljs-number">0</span>; w &lt; map[h].Length; ++w) {
+            map[h][w].Destroy();
+        }
+    }
+}
+</code></pre>
+<h3 id="window-size">Window size</h3>
+<p>If you want the tiles to fill out the full window, set the ClientSize of the window to <strong>30 * 8</strong> by <strong>30 * 6</strong>.</p>
+<ul>
+<li>30 - width / height of sprite</li>
+<li>8 / 6 - How many sprites we have horizontally (8) and vertically(6)</li>
+</ul>
+<p>If our sprites had a scale factor to them, we would take that into account as well. Here is what the game looks like with the window size adjusted:</p>
+<p><img src="Images/sample2.PNG" alt="SAMPLE2"></p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="./Chapter3.html" class="navigation navigation-prev " aria-label="Previous page: Map Format"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="./Practice/PracticeCh6.html" class="navigation navigation-next " aria-label="Next page: On Your Own"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="gitbook/app.js"></script>
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>
