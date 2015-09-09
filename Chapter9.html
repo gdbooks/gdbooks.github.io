@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>X Keys To Move | Introduction</title>
+        <title>Keys To Move | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -25,7 +25,7 @@
         
     
     
-    <link rel="next" href="./Chapter10.html" />
+    <link rel="next" href="./Practice/PracticeMoving.html" />
     
     
     <link rel="prev" href="./Practice/PracticeTheHero.html" />
@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="7" data-basepath="." data-revision="Mon Sep 07 2015 02:57:55 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="7" data-basepath="." data-revision="Wed Sep 09 2015 01:33:28 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -303,9 +303,30 @@
                         
                             <b>7.</b>
                         
-                        X Keys To Move
+                        Keys To Move
                     </a>
             
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1" data-path="Practice/PracticeMoving.html">
+            
+                
+                    <a href="./Practice/PracticeMoving.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.1.</b>
+                        
+                        On Your Own
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -746,6 +767,177 @@
                     
                         <h1 id="keys-to-move">Keys To Move</h1>
 <p>We have a hero on the screen! But he&apos;s not very mighty... He can&apos;t even move! Let&apos;s fix that. In this section we&apos;re going to add the ability to walk around the map.</p>
+<h3 id="new-project">New Project</h3>
+<p>Make a new project, call it <strong>KeysToMove</strong>, we&apos;re going to be starting off from the <strong>On Your Own</strong> section of <strong>The Hero</strong>. Meaning your new project should pop up a window, the window has a room, link is in the room and pressing the directional buttons moves link around.</p>
+<h3 id="player-character">Player character</h3>
+<p>In <strong>The Hero</strong> section, we made a <code>Character</code> class. This class contains the bare minimum information needed to display a character. We could add code to this class for handling input and moving around but that would get messy, after all not every <code>Character</code> instance will be controlled by the player! We want enemies to be <code>Character</code>s as well.</p>
+<p>The best way to solve this delima is to create a new class, we&apos;re going to call <code>PlayerCharacter</code>, this new class will extend <code>Character</code> and add player specific functionality to it! Let&apos;s get started. Make a new file, call it <strong>PlayerCharacter.cs</strong> and add the following code:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">using</span> System.Drawing; <span class="hljs-comment">// For Point</span>
+<span class="hljs-keyword">using</span> TheHero; <span class="hljs-comment">// For Character</span>
+
+<span class="hljs-keyword">namespace</span> <span class="hljs-title">KeysToMove</span> {
+    <span class="hljs-keyword">class</span> <span class="hljs-title">PlayerCharacter</span> : <span class="hljs-title">Character</span> {
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">PlayerCharacter</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> spriteSheet, Point startPos</span>) : <span class="hljs-title">base</span>(<span class="hljs-params">spriteSheet, startPos</span>) </span>{ 
+            <span class="hljs-comment">// ^ The Constructor which take a string and a Point of the base class (Character)</span>
+            <span class="hljs-comment">// is called using the : notation.</span>
+        }
+    }
+}
+</code></pre>
+<p>I don&apos;t know if we have used constructor chaining before. Constructor chaining is when a base class does not contain a default constructor, so the child class must call it&apos;s parents non-default constructor. This is done by adding <code>: base(/*args*/)</code> after the consturctor. In our example, we pass the arguments from the <code>PlayerCharacter</code> constructor to the <code>Character</code> constructor (refered to as <code>base</code>). </p>
+<p>When chaining constructors you don&apos;t always have to forward arguments, the following code would have also been perfectly valid:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">PlayerCharacter</span>(<span class="hljs-params"></span>) : <span class="hljs-title">base</span>(<span class="hljs-params"><span class="hljs-string">&quot;Default string&quot;</span>, new Point(-<span class="hljs-number">2</span>, <span class="hljs-number">5</span></span>)) </span>{
+</code></pre>
+<p>But we want the classes to work the same, so instead we take two arguments and forward them to the base class.</p>
+<h3 id="updating-the-character">Updating the character</h3>
+<p>The <code>PlayerCharacter</code> and <code>Character</code> classes at this point are interchangable. Go into your <strong>Game.cs</strong> file and change this line:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">protected</span> Character hero = <span class="hljs-keyword">null</span>;
+</code></pre>
+<p>To this:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">protected</span> PlayerCharacter hero = <span class="hljs-keyword">null</span>;
+</code></pre>
+<p>Also find this line:</p>
+<pre><code class="lang-cs">hero = <span class="hljs-keyword">new</span> Character(heroSheet, <span class="hljs-keyword">new</span> Point(SpawnTile.X * <span class="hljs-number">30</span>, SpawnTile.Y * <span class="hljs-number">30</span>));
+</code></pre>
+<p>And change it to this:</p>
+<pre><code class="lang-cs">hero = <span class="hljs-keyword">new</span> PlayerCharacter(heroSheet, <span class="hljs-keyword">new</span> Point(SpawnTile.X * <span class="hljs-number">30</span>, SpawnTile.Y * <span class="hljs-number">30</span>));
+</code></pre>
+<p>Beacuse the <code>PlayerCharacter</code> is specific to the hero,  it&apos;s safe to put hero specific things in there. Take this bit of code from <strong>Game.cs</strong>:</p>
+<pre><code class="lang-cs">hero.AddSprite(<span class="hljs-string">&quot;Down&quot;</span>,<span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">59</span>,<span class="hljs-number">1</span>,<span class="hljs-number">24</span>,<span class="hljs-number">30</span>));
+hero.AddSprite(<span class="hljs-string">&quot;Up&quot;</span>, <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">115</span>,<span class="hljs-number">3</span>,<span class="hljs-number">22</span>,<span class="hljs-number">28</span>));
+hero.AddSprite(<span class="hljs-string">&quot;Left&quot;</span>,<span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">26</span>,<span class="hljs-number">30</span>));
+hero.AddSprite(<span class="hljs-string">&quot;Right&quot;</span>, <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">195</span>, <span class="hljs-number">1</span>, <span class="hljs-number">26</span>, <span class="hljs-number">30</span>));
+hero.SetSprite(<span class="hljs-string">&quot;Down&quot;</span>);
+</code></pre>
+<p>And move it into the constructor of of the <code>PlayerCharacter</code> class:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">PlayerCharacter</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> spriteSheet, Point startPos</span>) : <span class="hljs-title">base</span>(<span class="hljs-params">spriteSheet, startPos</span>) </span>{
+    <span class="hljs-comment">// ^ The Constructor which take a string and a Point of the base class (Character)</span>
+    <span class="hljs-comment">// is called using the : notation.</span>
+
+    AddSprite(<span class="hljs-string">&quot;Down&quot;</span>, <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">59</span>, <span class="hljs-number">1</span>, <span class="hljs-number">24</span>, <span class="hljs-number">30</span>));
+    AddSprite(<span class="hljs-string">&quot;Up&quot;</span>, <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">115</span>, <span class="hljs-number">3</span>, <span class="hljs-number">22</span>, <span class="hljs-number">28</span>));
+    AddSprite(<span class="hljs-string">&quot;Left&quot;</span>, <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">26</span>, <span class="hljs-number">30</span>));
+    AddSprite(<span class="hljs-string">&quot;Right&quot;</span>, <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">195</span>, <span class="hljs-number">1</span>, <span class="hljs-number">26</span>, <span class="hljs-number">30</span>));
+    SetSprite(<span class="hljs-string">&quot;Down&quot;</span>);
+}
+</code></pre>
+<p>At this point you should be able to run the game. The game should display, and link should rotate when you press keys like nothing has happened.</p>
+<h3 id="moving">Moving</h3>
+<p>Let&apos;s add code to actually move the character! In order to move the character we have to do a little bit of house cleaning first. </p>
+<p>Currently we keep track of the <code>Character</code> position in a <strong>Point</strong>. This won&apos;t work, in order to move around the screen we need to store values as floating points. Find the following line in <strong>Character.cs</strong> </p>
+<pre><code class="lang-cs"><span class="hljs-keyword">public</span> Point Position { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+</code></pre>
+<p>and change it to</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">public</span> PointF Position { <span class="hljs-keyword">get</span>; <span class="hljs-keyword">set</span>; }
+</code></pre>
+<p>If you try to compile now, the compiler will throw an error. This is because our render method is trying to pass a <strong>PointF</strong> variable when a <strong>Point</strong> is expected. Still in <strong>Character.cs</strong>, find this bit of code:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Render</span>(<span class="hljs-params"></span>) </span>{
+    TextureManager.Instance.Draw(Sprite, Position, <span class="hljs-number">1.0</span>f,spriteSource[currentSprite]);
+}
+</code></pre>
+<p>and change it to:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Render</span>(<span class="hljs-params"></span>) </span>{
+    TextureManager.Instance.Draw(Sprite, <span class="hljs-keyword">new</span> Point((<span class="hljs-keyword">int</span>)Position.X, (<span class="hljs-keyword">int</span>)Position.Y), <span class="hljs-number">1.0</span>f,spriteSource[currentSprite]);
+}
+</code></pre>
+<p>And you should be able to compile again! Back in <strong>PlayerCharacter.cs</strong> lets add a speed variable. This varaible is going to determine how fast the player moves. I&apos;m going to set it to 90.0f, that is, move 90 pixels every second or 3 tiles in one second.</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">namespace</span> <span class="hljs-title">KeysToMove</span> {
+    <span class="hljs-keyword">class</span> <span class="hljs-title">PlayerCharacter</span> : <span class="hljs-title">Character</span> {
+        <span class="hljs-keyword">float</span> speed = <span class="hljs-number">90.0</span>f; <span class="hljs-comment">// NEW</span>
+
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">PlayerCharacter</span>(<span class="hljs-params"><span class="hljs-keyword">string</span> spriteSheet, Point startPos</span>) : <span class="hljs-title">base</span>(<span class="hljs-params">spriteSheet, startPos</span>) </span>{
+</code></pre>
+<p>Next let&apos;s add an <code>Update</code> method to the <code>PlayerCharacter</code> class. It should take one argument, <code>deltaTime</code>.</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> deltaTime</span>) </span>{
+    <span class="hljs-comment">// <span class="hljs-doctag"><span class="hljs-keyword">TODO</span></span>: Add move code</span>
+}
+</code></pre>
+<p>This method is going to be responsible for checking Keyboard Input. When the appropriate keys are pressed it&apos;s going to update the inherited <code>Position</code> property to make the character move (Remember, the character is rendered at <code>Position</code>) Let&apos;s fill in the missing code:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> deltaTime</span>) </span>{
+    InputManager i = InputManager.Instance;
+
+    PointF positionCpy = Position; <span class="hljs-comment">// Don&apos;t forget to change to PointF in parent class</span>
+    <span class="hljs-comment">// The Position getter is inherited from the Character class. </span>
+    <span class="hljs-comment">// We simply store a COPY of it here, so we can modify the </span>
+    <span class="hljs-comment">// X and Y properties indevidually. We also make </span>
+
+    <span class="hljs-keyword">if</span> (i.KeyDown(OpenTK.Input.Key.Left) || i.KeyDown(OpenTK.Input.Key.A)) {
+        positionCpy.X -= speed * deltaTime;
+    }
+    <span class="hljs-function"><span class="hljs-keyword">else</span> <span class="hljs-title">if</span> (<span class="hljs-params">i.KeyDown(OpenTK.Input.Key.Right</span>) || i.<span class="hljs-title">KeyDown</span>(<span class="hljs-params">OpenTK.Input.Key.D</span>)) </span>{
+        positionCpy.X += speed * deltaTime;
+    }
+
+    <span class="hljs-keyword">if</span> (i.KeyDown(OpenTK.Input.Key.Up) || i.KeyDown(OpenTK.Input.Key.W)) {
+        positionCpy.Y -= speed * deltaTime;
+    }
+    <span class="hljs-function"><span class="hljs-keyword">else</span> <span class="hljs-title">if</span> (<span class="hljs-params">i.KeyDown(OpenTK.Input.Key.Down</span>) || i.<span class="hljs-title">KeyDown</span>(<span class="hljs-params">OpenTK.Input.Key.S</span>)) </span>{
+        positionCpy.Y += speed * deltaTime;
+    }
+
+    Position = positionCpy; <span class="hljs-comment">// Move the copy we made back into the Postion variable</span>
+}
+</code></pre>
+<p>Running the game now, pressing the arrow keys.... Nothing moves! What gives? Well, we added an <code>Update</code> method to the <code>PlayerCharacter</code> class, but we are not calling this method anywhere! Let&apos;s go into <strong>Game.cs</strong> and add this <code>Update</code> call to the <code>Game</code>s update method:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> dt</span>) </span>{
+    InputManager i = InputManager.Instance; <span class="hljs-comment">//local ref to input manager</span>
+    <span class="hljs-comment">//using i just saves time</span>
+    <span class="hljs-keyword">if</span> (i.KeyDown(OpenTK.Input.Key.Left) || i.KeyDown(OpenTK.Input.Key.A)) {
+        hero.SetSprite(<span class="hljs-string">&quot;Left&quot;</span>);
+    }
+    <span class="hljs-keyword">if</span> (i.KeyDown(OpenTK.Input.Key.Right) || i.KeyDown(OpenTK.Input.Key.D)){
+        hero.SetSprite(<span class="hljs-string">&quot;Right&quot;</span>);
+    }
+    <span class="hljs-keyword">if</span> (i.KeyDown(OpenTK.Input.Key.Up) || i.KeyDown(OpenTK.Input.Key.W)) {
+        hero.SetSprite(<span class="hljs-string">&quot;Up&quot;</span>);
+    }
+    <span class="hljs-keyword">if</span> (i.KeyDown(OpenTK.Input.Key.Down) || i.KeyDown(OpenTK.Input.Key.S)) {
+        hero.SetSprite(<span class="hljs-string">&quot;Down&quot;</span>);
+    }
+
+    hero.Update(dt);
+}
+</code></pre>
+<p>Run the game now, and TADA! Your hero is moving! He&apos;s not colliding with any walls.... But we can fix that later. For now what matters is that the hero moved!</p>
+<h3 id="cleanup">Cleanup</h3>
+<p>One thing you may have noticed is that there is a lot of similar code between the <strong>Update</strong> method of <code>Game</code> and <code>PlayerCharacter</code>. Whenever you have a lot of similar code, chances are it&apos;s time to refactor (clean-up). </p>
+<p>Let&apos;s move all of the <code>SetSprite</code> methods for key input into the <code>PlayerCharacter</code> class. Updating this code, the <code>Update</code> method of <strong>Game.cs</strong> should now look like this:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> dt</span>) </span>{
+    hero.Update(dt);
+}
+</code></pre>
+<p>And the <code>Update</code> method of <strong>PlayerCharacter.cs</strong> should look like this:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> deltaTime</span>) </span>{
+    InputManager i = InputManager.Instance;
+
+    PointF positionCpy = Position; <span class="hljs-comment">// Don&apos;t forget to change to PointF in parent class</span>
+    <span class="hljs-comment">// The Position getter is inherited from the Character class. </span>
+    <span class="hljs-comment">// We simply store a COPY of it here, so we can modify the </span>
+    <span class="hljs-comment">// X and Y properties indevidually. We also make </span>
+
+    <span class="hljs-keyword">if</span> (i.KeyDown(OpenTK.Input.Key.Left) || i.KeyDown(OpenTK.Input.Key.A)) {
+        positionCpy.X -= speed * deltaTime;
+        SetSprite(<span class="hljs-string">&quot;Left&quot;</span>);
+    }
+    <span class="hljs-function"><span class="hljs-keyword">else</span> <span class="hljs-title">if</span> (<span class="hljs-params">i.KeyDown(OpenTK.Input.Key.Right</span>) || i.<span class="hljs-title">KeyDown</span>(<span class="hljs-params">OpenTK.Input.Key.D</span>)) </span>{
+        positionCpy.X += speed * deltaTime;
+        SetSprite(<span class="hljs-string">&quot;Right&quot;</span>);
+    }
+
+    <span class="hljs-keyword">if</span> (i.KeyDown(OpenTK.Input.Key.Up) || i.KeyDown(OpenTK.Input.Key.W)) {
+        positionCpy.Y -= speed * deltaTime;
+        SetSprite(<span class="hljs-string">&quot;Up&quot;</span>);
+    }
+    <span class="hljs-function"><span class="hljs-keyword">else</span> <span class="hljs-title">if</span> (<span class="hljs-params">i.KeyDown(OpenTK.Input.Key.Down</span>) || i.<span class="hljs-title">KeyDown</span>(<span class="hljs-params">OpenTK.Input.Key.S</span>)) </span>{
+        positionCpy.Y += speed * deltaTime;
+        SetSprite(<span class="hljs-string">&quot;Down&quot;</span>);
+    }
+
+    Position = positionCpy; <span class="hljs-comment">// Move the copy we made back into the Postion variable</span>
+}
+</code></pre>
+<p>The <code>SetSprite</code> method is callable because we inherited it from the <code>Character</code> class. Sometimes it can get a little hard to follow what is and isn&apos;t accessable. If you are feeling brave, try using <a href="https://www.draw.io/" target="_blank">draw.io</a> or <a href="http://argouml.tigris.org/" target="_blank">ArgoUML</a> (i suggest draw.io) to make a UML diagram the current project. If you end up making the UML check the exported PNG image into your repo.</p>
 
                     
                     </section>
@@ -759,7 +951,7 @@
         <a href="./Practice/PracticeTheHero.html" class="navigation navigation-prev " aria-label="Previous page: On Your Own"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="./Chapter10.html" class="navigation navigation-next " aria-label="Next page: X Hit The Wall"><i class="fa fa-angle-right"></i></a>
+        <a href="./Practice/PracticeMoving.html" class="navigation navigation-next " aria-label="Next page: On Your Own"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
