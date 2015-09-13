@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>X Open The Door | Introduction</title>
+        <title>Open The Door | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -25,7 +25,7 @@
         
     
     
-    <link rel="next" href="./Chapter12.html" />
+    <link rel="next" href="./cleanup.html" />
     
     
     <link rel="prev" href="./Chapter10.html" />
@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="9" data-basepath="." data-revision="Sat Sep 12 2015 03:40:58 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="9" data-basepath="." data-revision="Sun Sep 13 2015 05:15:44 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -354,9 +354,45 @@
                         
                             <b>9.</b>
                         
-                        X Open The Door
+                        Open The Door
                     </a>
             
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="9.1" data-path="cleanup.html">
+            
+                
+                    <a href="./cleanup.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>9.1.</b>
+                        
+                        Cleaning Up
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="borders.html">
+            
+                
+                    <a href="./borders.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>9.2.</b>
+                        
+                        Screen Borders
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -765,7 +801,112 @@
                 
                     <section class="normal" id="section-">
                     
-                        <h1 id="chapter-11-open-the-door">Chapter 11 - Open The Door</h1>
+                        <h1 id="open-the-door">Open The Door</h1>
+<p>In the last chapter we explored how to add collision to the walls of our room. This is aweome! But Link is feeling claustrophobic! He is an epic hero, confined to a tiny room... In this chapter we are going to double the size of Link&apos;s world by adding a second room to it! Here is the layout of what this is going to look like:</p>
+<p><img src="Images/multiroom.png" alt="ROOMS"></p>
+<p>Of course only one of these rooms is going to be visible at a time, link&apos;s going to have to go trough the green door to visit the adjacent room. </p>
+<p>The nice thing here, none of the code for this is going to have to go inside the <code>PlayerCharacter</code> class, as none of this is specific to the player. Instead we&apos;re going to be writing most of our code inside of <strong>Game.cs</strong></p>
+<h3 id="new-project">New Project</h3>
+<p>Let&apos;s make a new project, call it <strong>OpenTheDoor</strong> and get this project up to par with the <strong>HitTheWall</strong> section of the writeup. We&apos;re going to work from here.</p>
+<h3 id="the-door-tile">The door tile</h3>
+<p>First thing is first, let&apos;s add our door tile that will lead into the second room. We&apos;re going to be working in <strong>Game.cs</strong>. Right now we define the map layout in the <code>mapLayout</code> variable where tile 1 is a wall and tile 0 is walkable. Let&apos;s add tile 2, which will be the door. </p>
+<ul>
+<li>In the <code>mapLayout</code> varibale, change the appropriate tile to be a door<ul>
+<li>Look at the above screnshot, it&apos;s the tile in the lower right</li>
+</ul>
+</li>
+<li>Add <code>new Rectangle(32, 187, 30, 30)</code> to the <code>spriteSources</code> array</li>
+<li>Make tile 2 walkable. So tiles 0 and 2 should both be walkable.</li>
+</ul>
+<p>Be careful when walking around! While you should be able to walk a little bit into the door, if you walk too far into the new door tile the game will crash. This is expected. After the above changes, running the game should look like this:</p>
+<p><img src="Images/door1.PNG" alt="DOOR1"></p>
+<h3 id="the-second-room">The second room</h3>
+<p>Sweet we now have a door (well, visually at least), but it doesn&apos;t lead anywhere! We&apos;re going to add a second map. Still in <strong>Game.cs</strong>, refactor the name of the <code>map</code> variable to be <code>room1</code>. To do this, right click on <code>map</code> and select <strong>Rename</strong></p>
+<p><img src="Images/rename_map.png" alt="RENAME"></p>
+<p>This will cause the <code>map</code> variable to highlight in some strange green color, just start typing and the name of the variable will change. When you are done, hit enter and all instances of <code>map</code> will be autmatically renamed for you.</p>
+<p><img src="Images/green_map.PNG" alt="GREEN"></p>
+<p>Now rename the <code>mapLayout</code> variable to be named <code>room1Layout</code>. </p>
+<p><strong>Run The Game</strong> at this point it&apos;s important for you to run the game and make sure it still works correctly!</p>
+<p>Next, let&apos;s add the definition of <code>room2</code> and <code>room2Layout</code>. Seeing how this is mostly a copy / paste job of <code>room1</code> with minor alterations, use this clode:</p>
+<pre><code>protected Tile[][] room2 = null;
+
+protected int[][] room2Layout = new int[][] {
+    new int[] { 1, 1, 1, 1, 1, 1, 1, 1 },
+    new int[] { 2, 0, 0, 0, 1, 0, 0, 1 },
+    new int[] { 1, 0, 0, 0, 0, 0, 0, 1 },
+    new int[] { 1, 0, 0, 0, 0, 0, 0, 1 },
+    new int[] { 1, 0, 0, 0, 1, 0, 0, 1 },
+    new int[] { 1, 1, 1, 1, 1, 1, 1, 1 }
+};
+</code></pre><p>Inside of the <strong>Initialize</strong> function, make sure that <code>room2</code> is created! Also, inside <strong>Destroy</strong> make sure that <code>room2</code> is unloaded.</p>
+<h3 id="the-current-room">The current room</h3>
+<p>At this point we have two rooms, but they are kind of useless. This is because every function is hard-coded to work with room1. Let&apos;s fix that by introducing a <code>currentRoom</code> variable! Start off by adding these two member variables:</p>
+<pre><code>protected Tile[][] currentRoom = null;
+protected int[][] currentLayout = null;
+</code></pre><p>At the end of the initialize function point the <code>currentRoom</code> and <code>currentLayout</code> references at room2, like so:</p>
+<pre><code>currentRoom = room2;
+currentLayout = room2Layout;
+</code></pre><p>Of course running the game, link still starts out in <code>room1</code>. this is because nothing is using the <code>currentRoom</code> variable yet. Update the following to use <code>currentRoom</code> instead of <code>room1</code>:</p>
+<ul>
+<li>GetTile function</li>
+<li>Render function</li>
+</ul>
+<p><strong>Running the game</strong>, link should now be in room2. Make sure the collisions are correct.</p>
+<h3 id="walking-trough-the-door">Walking trough the door</h3>
+<p>The last thing left to do is to add the logic to walk link trough that door. And this is going to be pretty simple. In the <code>Update</code> method of <strong>Game.cs</strong>, we&apos;re going to check if the player rectangle intersects with any door rectangles. If it does, based on the door number we will set currentRoom to the appropriate room. Finally, we will set the position of the player to look like he&apos;s walked trough the door.</p>
+<p>One thing you might have noticed about the above logic, if we transport the player as soon as he touches the door, it might not look natural. It definateley won&apos;t look like link is walking trough the door... More like he accidentally touched a magic portal. Because of this, instead of checking links bounding box, we&apos;re going to construct a 4PX rectangle at his center. And we will test this against intersecting with the door.</p>
+<p>I originally wanted to make this an &quot;On Your Own&quot; exercise, but the code is pretty straight forward, and it&apos;s hard to give instructions on it. So, read the below code carefully, and let me know if you have any questions.</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Update</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> dt</span>) </span>{
+    <span class="hljs-comment">// Let the hero move, and sort out any collision issues</span>
+    hero.Update(dt);
+    <span class="hljs-comment">// We need to check for doors AFTER the player has moved</span>
+
+    <span class="hljs-comment">// Loop torugh the layout, the Tile class does not know if it is a door or not.</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> row = <span class="hljs-number">0</span>; row &lt; currentLayout.Length; ++row) {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> col = <span class="hljs-number">0</span>; col &lt; currentLayout[row].Length; ++col) {
+            <span class="hljs-comment">// The tile is a door if it had a 2 in the layout!</span>
+            <span class="hljs-keyword">if</span> (currentLayout[row][col] == <span class="hljs-number">2</span>) {
+                <span class="hljs-comment">// Get the door&apos;s bounding rectangle</span>
+                Rectangle doorRect = GetTileRect(<span class="hljs-keyword">new</span> PointF(col * <span class="hljs-number">30</span>, row * <span class="hljs-number">30</span>));
+
+                <span class="hljs-comment">// Get a small rectangle in the center of the player</span>
+                Rectangle playerCenter = <span class="hljs-keyword">new</span> Rectangle((<span class="hljs-keyword">int</span>)hero.Center.X - <span class="hljs-number">2</span>, (<span class="hljs-keyword">int</span>)hero.Center.Y - <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">4</span>);
+
+                <span class="hljs-comment">// Look for an intersection</span>
+                Rectangle intersection = Intersection.Rect(doorRect, playerCenter);
+
+                <span class="hljs-comment">// Intersection happens if the intersect rectangle has an area &gt; 0</span>
+                <span class="hljs-keyword">if</span> (intersection.Width * intersection.Height &gt; <span class="hljs-number">0</span>) {
+                    <span class="hljs-comment">// If we are in room1, move to room 2</span>
+                    <span class="hljs-keyword">if</span> (currentRoom == room1) {
+                        <span class="hljs-comment">// Set active room</span>
+                        currentRoom = room2;
+                        currentLayout = room2Layout;
+
+                        <span class="hljs-comment">// Reposition hero to tile outside of door</span>
+                        hero.Position.X = <span class="hljs-number">1</span> * <span class="hljs-number">30</span>; <span class="hljs-comment">// Column 1</span>
+                        hero.Position.Y = <span class="hljs-number">1</span> * <span class="hljs-number">30</span>; <span class="hljs-comment">// Row 1</span>
+                    }
+                    <span class="hljs-comment">// If we are in room 2, move to room 1</span>
+                    <span class="hljs-keyword">else</span> {
+                        <span class="hljs-comment">// Set active room</span>
+                        currentRoom = room1;
+                        currentLayout = room1Layout;
+
+                        <span class="hljs-comment">// Reposition hero to tile outside of door</span>
+                        hero.Position.X = <span class="hljs-number">6</span> * <span class="hljs-number">30</span>; <span class="hljs-comment">// Column 6</span>
+                        hero.Position.Y = <span class="hljs-number">4</span> * <span class="hljs-number">30</span>; <span class="hljs-comment">// Row 4</span>
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<p><strong>Run the game</strong>, you should now be able to walk from room to room!</p>
+<p>You might be thinking to yourself, we could make things easyer by storing a bolean in the <code>Tile</code> class, then we wouldn&apos;t need to loop trough the tileLayout array.... And you are correct! In fact, that&apos;s what the next section is all about. Read on!</p>
+<h1 id="cleaning-up">Cleaning Up</h1>
+<p>Follow along to the code in the <strong>Cleaning</strong> Up subsection inside of this (OpenTheDoor) project. The <strong>Cleaning Up</strong> section just gives us an easy way to store room&apos;s as objects, instead of cluttering up the <strong>Game.cs</strong> file.</p>
 
                     
                     </section>
@@ -779,7 +920,7 @@
         <a href="./Chapter10.html" class="navigation navigation-prev " aria-label="Previous page: Hit The Wall"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="./Chapter12.html" class="navigation navigation-next " aria-label="Next page: X Jumping"><i class="fa fa-angle-right"></i></a>
+        <a href="./cleanup.html" class="navigation navigation-next " aria-label="Next page: Cleaning Up"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
