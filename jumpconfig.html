@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>X More Tiles | Introduction</title>
+        <title>Configurable Jumping | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -25,8 +25,10 @@
         
     
     
+    <link rel="next" href="./Chapter13.html" />
     
-    <link rel="prev" href="./Chapter30.html" />
+    
+    <link rel="prev" href="./Chapter12.html" />
     
 
         
@@ -34,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="29" data-basepath="." data-revision="Mon Sep 14 2015 02:47:47 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="10.1" data-basepath="." data-revision="Mon Sep 14 2015 02:47:47 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -410,7 +412,7 @@
             <ul class="articles">
                 
     
-        <li class="chapter " data-level="10.1" data-path="jumpconfig.html">
+        <li class="chapter active" data-level="10.1" data-path="jumpconfig.html">
             
                 
                     <a href="./jumpconfig.html">
@@ -700,7 +702,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="29" data-path="Chapter7.html">
+        <li class="chapter " data-level="29" data-path="Chapter7.html">
             
                 
                     <a href="./Chapter7.html">
@@ -820,8 +822,55 @@
                 
                     <section class="normal" id="section-">
                     
-                        <h1 id="more-tiles">More Tiles</h1>
-<p>In all of our examples we have loaded tiles by hand. We did breafly look at how to use tools to generate some understandable data, but it only goes so far. Let&apos;s leave off with an easy to parse map format. In this chapter we&apos;re going to load and save maps.</p>
+                        <h1 id="configure-the-jump">Configure the jump</h1>
+<p>The ability to jump is great! But right now it feels a bit off. Jumping is controlled by two variables, gravity and impulse. If we want to change the jump behaviour we have to change these two numbers. Here is the thing tough, i&apos;m an engineer and i don&apos;t know what the gravity needs to be to jump 3 tiles high in half a second.</p>
+<p><a href="http://www.atomjack.net/blog/2014/12/9/dev-blog-designing-a-jump" target="_blank">When you design a jump</a> having gravity and impulse is not intuitive. You usually want to design a jump around two other values, <strong>Height</strong> and <strong>Duration</strong>. Saying i want to jump 3 tiles tall in 0.25 seconds is super intuitive, and makes creating <a href="http://excitemike.com/JumpingControlTester" target="_blank">Different jump behaviours</a> a lot easyer. </p>
+<p>So, can we actually do this? Come up with a way to specify height and duration instead of gravity and velocity? Yes, yes we can. With math. Complicated math. Hard math. Confusing math. Man math! What follows might be confusing or hard. I didn&apos;t come up with it. This is math i can&apos;t actually derive, i had to look up the formulas. I&apos;ll link where i found those formulas at the end of the chapter.</p>
+<h3 id="the-jumping-system">The jumping system</h3>
+<p><img src="Images/jump_graph.png" alt="JUMP_GRAPH"></p>
+<p>In the above picture there are four forces controlling the jump:</p>
+<ul>
+<li><strong>height</strong>: The maximum peak height of our jump in world units</li>
+<li><strong>duration</strong>: The duration from when we jump until we reach the peak in seconds</li>
+<li><strong>impulse</strong>: Our initial upward velocity when we jump in units per second</li>
+<li><strong>gravity</strong>: Our acceleration due to gravity pulling us back down in units per second squared</li>
+</ul>
+<p>Only impulse and gravity is needed to <strong>define the jump</strong>, height and duration actually <strong>describe the jump</strong>. We already have the jump definition in our code, all we need is to figure out a way to convert the jump description into a definition. Lickly given any two of these four items, we can find the other two.</p>
+<h3 id="jumping-conversions">Jumping conversions</h3>
+<p>Given a height and duration:</p>
+<ul>
+<li><strong>impulse</strong> = 2 * height / duration</li>
+<li><strong>gravity</strong> = negative impulse / duration</li>
+</ul>
+<p>Using the above formulas, add this method to the <strong>Player Character</strong> class, and fill in the blanks:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SetJump</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> height, <span class="hljs-keyword">float</span> duration</span>) </span>{
+    impulse = <span class="hljs-comment">// <span class="hljs-doctag"><span class="hljs-keyword">TODO</span></span></span>
+    impulse *= -<span class="hljs-number">1</span>; <span class="hljs-comment">// Remember, in our implementation model, impulse starts off negative!</span>
+    gravity = <span class="hljs-comment">// <span class="hljs-doctag"><span class="hljs-keyword">TODO</span></span></span>
+}
+</code></pre>
+<p>The above are the only conversions we care about, but for the sake of fullness, here are ALL of the conversions:</p>
+<ul>
+<li><strong>height</strong> = impulse * duration / 2</li>
+<li><strong>impulse</strong> = 2 * height / duration</li>
+<li><strong>duration</strong> = 2 * height / impulse</li>
+<li><strong>impulse</strong> = negative gravity * duration</li>
+<li><strong>duration</strong> = negative impulse / gravity</li>
+<li><strong>gravity</strong> = negative impulse / duration</li>
+</ul>
+<h3 id="configuring-the-jump">Configuring the jump</h3>
+<p>In the <strong>PlayerCharacter.cs</strong> <code>Initialize</code> function, after you&apos;ve added all the sprites call the new <code>SetJump</code> function. Just for fun you can add a console log to the SetJump function to see what the impulse and gravity you are setting are eventually going to be.</p>
+<p>Play around wih the numbers for a bit to see it working. Remember, height is in world pixels. This means if you want to jump 3 tiles height will need to be 3 * 30. Also, duration is in seconds. If you set either number too high the game is going to crash, this is because link will simply tunnel trough the obstacles, into the void.</p>
+<p>Now that you&apos;ve played around with the values, here are the defaults we will be using for the rest of the book:</p>
+<ul>
+<li><strong>height</strong>: 3.0f * 3.0f // 3 tiles</li>
+<li><strong>duration</strong>: 0.75f // three fourths of a second</li>
+</ul>
+<h3 id="check-in">Check in</h3>
+<p>Before moving onto the next section (Clouds) i want you to check in with me, we did some pretty complicated code for jumping and i want to make sure that there are no errors in your code at this point.</p>
+<h1 id="formula-origins">Formula origins</h1>
+<p>Like i said, i don&apos;t know the formulas for height / impulse / gravity / duration conversion by heart. What&apos;s worse, i&apos;m not good enough at math to derive them! This is actually something pretty common in games, we need complicated math but can&apos;t always derive said math. Luckly other people have done so for us. A little google goes a long way.</p>
+<p>All of the formulas i&apos;ve used on this page have come from <a href="http://www.piratehearts.com/blog/2012/11/30/deriving-the-mathematics-of-jumping-physics-part-1-of/" target="_blank">this article</a>. While researching i also found <a href="http://error454.com/2013/10/23/platformer-physics-101-and-the-3-fundamental-equations-of-platformers/" target="_blank">another promising article</a>, but the first one had the exact formulas i needed so i never read the second one. You should read trough those articles. They might make more sense to you than they did to me.</p>
 
                     
                     </section>
@@ -832,8 +881,10 @@
         </div>
 
         
-        <a href="./Chapter30.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: X Hexagons"><i class="fa fa-angle-left"></i></a>
+        <a href="./Chapter12.html" class="navigation navigation-prev " aria-label="Previous page: Jumping"><i class="fa fa-angle-left"></i></a>
         
+        
+        <a href="./Chapter13.html" class="navigation navigation-next " aria-label="Next page: X Clouds"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>

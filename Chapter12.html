@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>X Jumping | Introduction</title>
+        <title>Jumping | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -25,7 +25,7 @@
         
     
     
-    <link rel="next" href="./Chapter13.html" />
+    <link rel="next" href="./jumpconfig.html" />
     
     
     <link rel="prev" href="./borders.html" />
@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="10" data-basepath="." data-revision="Sun Sep 13 2015 05:15:44 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="10" data-basepath="." data-revision="Mon Sep 14 2015 02:47:47 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -405,9 +405,30 @@
                         
                             <b>10.</b>
                         
-                        X Jumping
+                        Jumping
                     </a>
             
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="10.1" data-path="jumpconfig.html">
+            
+                
+                    <a href="./jumpconfig.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.1.</b>
+                        
+                        Configurable Jumping
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -801,7 +822,223 @@
                 
                     <section class="normal" id="section-">
                     
-                        <h1 id="chapter-12-jumping">Chapter 12 - Jumping</h1>
+                        <h1 id="jumping">Jumping</h1>
+<p>Tile games don&apos;t al have to be top down. We can change perspectives pretty easily. In this chapter we are going to do just that. Instead of the game playing top-down we&apos;re going to make it play from a side view. Mario style! The gameboy zelda games do include some side scrolling sections:</p>
+<p><img src="Images/link_side_scroll.png" alt="SIZE_SCROLL"></p>
+<h3 id="new-project">New Project</h3>
+<p>Let&apos;s make a new project, call it <strong>Jumping</strong> and get this project up to par with the cleaned up OpenTheDoor section of the writeup. We&apos;re going to work from here.</p>
+<h3 id="playercharacter-refactor">PlayerCharacter refactor</h3>
+<p>One of the most important things in turning our tile engine from top down into a side scroller is to not allow horizontal movement! Let&apos;s add a new <code>#define</code> the top of the <strong>PlayerCharacter.cs</strong></p>
+<pre><code>//#define ENABLE_VERTICAL_MOVEMENT
+</code></pre><p>Have the new define be commented out as we&apos;re not going to be using it! Now go to the <code>Update</code> function, and find the if-elseif block that handles up and down movement. Put this into a <code>#if</code> block, add a <code>#else</code> block, we&apos;re going to be working in the <code>#else</code> block.</p>
+<pre><code>#if ENABLE_VERTICAL_MOVEMENT
+    // Vertical movement code
+#else if
+    // We&apos;re going to be writing the code for this section in here.
+#endif
+</code></pre><h3 id="gravity">Gravity</h3>
+<p>Adding gravity is going to be pretty straight forward, first let&apos;s declare a new member variable and call it <code>gravity</code>. This veriable represents how many <em>pixels</em> the character is going to fall per second. So, if we wanted him to fall 2 tiles we would have to set gravity equal to 2 * 30.</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">float</span> gravity = <span class="hljs-number">7</span> * <span class="hljs-number">30</span>; <span class="hljs-comment">// Fall 7 tiles / second</span>
+</code></pre>
+<p>Now go to the <code>#else</code> block and add gravity times delta time to the players y position every frame. If you <strong>run the game</strong> the player character will simply fall down, your application might or might not crash. Let&apos;s fix this by adding some collision detection.</p>
+<p>In the commented out (by the <code>#if</code> section of code we have some code to handle the case of link trying to walk down and off screen. We&apos;re going to copy <strong>ONLY</strong> the collision handling part of that code, and paste it after updating the players position by gravity. This is the bit of code i&apos;m talking about:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (!Game.Instance.GetTile(Corners[CORNER_BOTTOM_LEFT]).Walkable) {
+    Rectangle intersection = Intersection.Rect(Rect, Game.Instance.GetTileRect(Corners[CORNER_BOTTOM_LEFT]));
+    <span class="hljs-keyword">if</span> (intersection.Width * intersection.Height &gt; <span class="hljs-number">0</span>) {
+        Position.Y = intersection.Top - Rect.Height;
+    }
+}
+<span class="hljs-keyword">if</span> (!Game.Instance.GetTile(Corners[CORNER_BOTTOM_RIGHT]).Walkable) {
+    Rectangle intersection = Intersection.Rect(Rect, Game.Instance.GetTileRect(Corners[CORNER_BOTTOM_RIGHT]));
+    <span class="hljs-keyword">if</span> (intersection.Width * intersection.Height &gt; <span class="hljs-number">0</span>) {
+        Position.Y = intersection.Top - Rect.Height;
+    }
+}
+</code></pre>
+<p><strong>Run the game</strong> again and you should now be colliding with tiles. Link starts off on a platform and can walk left or right to fall. You can even enter the other room!</p>
+<h3 id="jumping-theory">Jumping Theory</h3>
+<p>If you are trying to figure out how to make a 2D character jump, google will sooner or later take you to <a href="http://gamedev.stackexchange.com/questions/29617/how-to-make-a-character-jump#29618" target="_blank">this stack overflow answer</a>. The answer gives the standard jump parabola, to jump you need two forces:</p>
+<ul>
+<li><strong>Gravity</strong> - always pulls the player down</li>
+<li><strong>Velocity</strong> - can push player up or down</li>
+</ul>
+<p>We&apos;re going to use these two forces, but they will not both effect the player. Gravity is going to be constantly pulling velocity down. Velocity will be moving the player. We will also introduce a third force, <strong>Impulse</strong>. </p>
+<ul>
+<li><strong>Impulse</strong> - force exerted by character to change velocity</li>
+</ul>
+<p>Gravity will always be pulling velocity down, and velocity will move the character. So how can velocity ever push the character up? In order to do so we have to apply another force to velocity, this force is impulse. While gravity is constantly pulling down, impulse will suddenly push up.</p>
+<p><strong>Example 1:</strong> Character is at (30, 60). Our velocity is 0. Gavity is 2.</p>
+<ul>
+<li>Frame 1: <em>Character in initial position</em><ul>
+<li>Character is stationary velocity is 0, character at y pixel 60</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s now 2</li>
+</ul>
+</li>
+<li>Frame 2: <em>Character starts falling</em><ul>
+<li>Character is moved down by velocity (2) to y pixel (58)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s now 4</li>
+</ul>
+</li>
+<li>Frame 3:<ul>
+<li>Character is moved down by velocity (4) to y pixel (54)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s now 6</li>
+</ul>
+</li>
+<li>Frame 4:<ul>
+<li>Character is moved down by velocity (6) to y pixel (48)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s now 8</li>
+</ul>
+</li>
+<li>Frame 5:<ul>
+<li>Character is moved down by velocity (8) to y pixel (40)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s now 10</li>
+</ul>
+</li>
+</ul>
+<p>As you can see from this 5 frame example, the simple model outlined above has one simple flaw, velocity is constantly increasing! The longer the character falls, the faster he will fall! We&apos;re going to fix this by clamping velocity to gravity: <code>velocity = Math.Min(velocity, gravity</code>. I don&apos;t think i need to include an example for the clamped velocity. But let&apos;s see an example with it in place where we apply an impulse!</p>
+<p><strong>Example 2:</strong> Character is at (30, 60). Our velocity is 0. Gavity is 2. Impulse is -6</p>
+<ul>
+<li>Frame 1: <em>Character in initial position</em><ul>
+<li>Character is stationary velocity is 0, character at y pixel 60</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s now 2</li>
+</ul>
+</li>
+<li>Frame 2: <em>Character starts falling</em><ul>
+<li>Character is moved down by velocity (2) to y pixel (58)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s 4, it gets clamped back to 2 (the value of gravity)</li>
+</ul>
+</li>
+<li>Frame 3:<ul>
+<li>Character is moved down by velocity (2) to y pixel (56)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s 4, it gets clamped back to 2 (the value of gravity)</li>
+</ul>
+</li>
+<li>Frame 4:<ul>
+<li>Character is moved down by velocity (2) to y pixel (54)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s 4, it gets clamped back to 2 (the value of gravity)</li>
+</ul>
+</li>
+<li>Frame 5:<ul>
+<li>Character is moved down by velocity (2) to y pixel (52)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s 4, it gets clamped back to 2 (the value of gravity)</li>
+</ul>
+</li>
+<li>Frame 6: <strong>Impulse is added</strong><ul>
+<li>Character is moved down by velocity (2) to y pixel (50)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s 4, it gets clamped back to 2 (the value of gravity)</li>
+<li>Impulse (-6) is added to velocity (2), velocity is now -4</li>
+</ul>
+</li>
+<li>Frame 7: <em>Character is moving up</em> <ul>
+<li>Character is pushed up by velocity (-4) to y pixel (56)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s now -2  </li>
+</ul>
+</li>
+<li>Frame 8:<ul>
+<li>Character is pushed up by velocity (-2) to y pixel (54)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s now 0</li>
+</ul>
+</li>
+<li>Frame 9: <em>nothings happening</em><ul>
+<li>Character is stationary velocity is 0, character at y pixel 60</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s now 2</li>
+</ul>
+</li>
+<li>Frame 10: <em>falling down again</em><ul>
+<li>Character is moved down by velocity (2) to y pixel (56)</li>
+<li>Velocity is pulled down by gravity (2) it&apos;s now 2</li>
+</ul>
+</li>
+</ul>
+<p>I feel like a companion gif would be really helpful, but i have no idea how to make proper gif images. If the above doesn&apos;t make sense give me a call and i will try my best to explain it!</p>
+<h3 id="jumping-implementation">Jumping implementation</h3>
+<p>Let&apos;s start by adding our new variables. Gravity and impulse are constant forces, they don&apos;t change frame over frame. But velocity does:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">float</span> gravity = <span class="hljs-number">210.0</span>f; <span class="hljs-comment">// Fall 7 tiles / second, constant</span>
+<span class="hljs-keyword">float</span> impulse = -<span class="hljs-number">180.0</span>f; <span class="hljs-comment">// Randomly chosen, constant</span>
+<span class="hljs-comment">// Impulse is negative because the force is going up!</span>
+<span class="hljs-keyword">float</span> velocity = <span class="hljs-number">0.0</span>f; <span class="hljs-comment">// Changes every frame</span>
+</code></pre>
+<p>Next, we need to change the update method. </p>
+<ul>
+<li>Instead of adding <code>gravity * deltaTime</code> to <code>Position.Y</code> add <code>velocity * deltaTime</code></li>
+<li>Above that, add <code>gravity * deltaTime</code> to velocity! This moves velocity down.</li>
+<li>Don&apos;t forget to clamp <code>velocity</code>, it can never be greater than gravity!</li>
+</ul>
+<p><strong>Run the game</strong> now, and nothing has changed! If you did everything correctly you should be able to walk around, fall off the platform, all kinds of fun! Let&apos;s add the code to actually jump. Before applying gravity to velocity, check is the space bar is pressed. If it is, <strong>set velocity equal to impulse</strong>. This is how we apply the impulse force. <strong>Run the game now</strong> and you should be able to jump after having fallen off the platform the character starts on.</p>
+<p>The jumping might feel a bit floaty right now, but that&apos;s ok. We will fix that later. Right now we have a bigger problem. There is no top collision! You can jump right out of the game! Kind of an easy fix. We already have code to prevent link from moving trough tiles upwards in the commented out <code>#if</code> block, let&apos;s go ahead and add that back in. Paste the top collision checking code after the code to check for floor collision. This is the bit that i&apos;m talking about:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (!Game.Instance.GetTile(Corners[CORNER_TOP_LEFT]).Walkable) {
+    Rectangle intersection = Intersection.Rect(Rect, Game.Instance.GetTileRect(Corners[CORNER_TOP_LEFT]));
+    <span class="hljs-keyword">if</span> (intersection.Width * intersection.Height &gt; <span class="hljs-number">0</span>) {
+        Position.Y = intersection.Bottom;
+    }
+}
+<span class="hljs-keyword">if</span> (!Game.Instance.GetTile(Corners[CORNER_TOP_RIGHT]).Walkable) {
+    Rectangle intersection = Intersection.Rect(Rect, Game.Instance.GetTileRect(Corners[CORNER_TOP_RIGHT]));
+    <span class="hljs-keyword">if</span> (intersection.Width * intersection.Height &gt; <span class="hljs-number">0</span>) {
+        Position.Y = intersection.Bottom;
+    }
+}
+</code></pre>
+<p>It&apos;s almost perfect. However if you jump up and hit your head, you kind of float around for a while... This is immediateley obvious when you jump below the first platform. The reason for this should be obvious by now, velocity is pulling link up, but the tile collision clamps his position. This however doesn&apos;t stop velocity from pulling him up. </p>
+<p>The fix is simple, we need to change velocity! We need to apply this code in two places, after each collision handler (<code>Position.Y = intersection.Bottom;</code>, still inside the area check if statement). But what do we set <code>velocity</code> to??? As it turns out we have three options, i encourage you to try all three:</p>
+<ul>
+<li><strong>0</strong> - This will cause link to fall from the top of his parabola. That is, slowly<ul>
+<li>Can be visually jarring if you hit something mid jump. </li>
+<li>This is because the falling / jumping speed is different based on jump time</li>
+</ul>
+</li>
+<li><strong>gravity</strong> - This will cause a very abrupt fall.<ul>
+<li>Can be visually jarring, if link is at the top of his jump his fal will be super fast</li>
+</ul>
+</li>
+<li><strong>Math.Abs(velocity)</strong> or <strong>velocity * -1.0f</strong>. This will keep fall speed the same as jump speed.<ul>
+<li>The speed in which link travels stays the same, only direction changes </li>
+<li>The most visually appealing in my opinion. </li>
+</ul>
+</li>
+</ul>
+<p>So yeah, in my code i set <code>velocity = Math.Abs(velocity);</code>, i suggest you do the same, it looks the best and is closest to what would actually happen in the real world.</p>
+<h3 id="jump-animation">Jump animation</h3>
+<p>Now that the jump is functional, let&apos;s add an animation to it. If you look at the link sprite sheet, he has a jump animation! First, add the jump sprite to the player character:</p>
+<pre><code class="lang-cs">AddSprite(<span class="hljs-string">&quot;Jump&quot;</span>, <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">122</span>, <span class="hljs-number">75</span>, <span class="hljs-number">23</span>, <span class="hljs-number">30</span>), <span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">154</span>, <span class="hljs-number">76</span>, <span class="hljs-number">22</span>, <span class="hljs-number">30</span>));
+</code></pre>
+<p>Next, in the if statement that sets impulse, set the sprite as well</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (i.KeyPressed(OpenTK.Input.Key.Space)) {
+    velocity = impulse;
+    SetSprite(<span class="hljs-string">&quot;Jump&quot;</span>);
+}
+</code></pre>
+<p>Lastly, after the above if statement add a new one. We&apos;re going to check if velocity is anything else than gravity. If so, we&apos;re going to call animate, because link is mid-jump.</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (velocity != gravity) {
+    Animate(deltaTime);
+}
+</code></pre>
+<p><strong>Run the game</strong> and you&apos;re going to notice several stange artifacts. Link starts out animated. Landing a jump shows the wrong sprite. Landing on a higher platform keeps the animation playing. These are simple bugs introduced by the new animation. Luckly we can fix them pretty easy. Let&apos;s do that one at a time.</p>
+<p>Link start out animated, this is the easyest one. When the game starts velocity is equal to 0, not gravity. So, technically even tough link has hit a platform he is still falling. Find the code that handles links collision with objects below him, and set velocity equal to gravity. Hint: You will have to do this in two places, just like the code where he hit his head.</p>
+<p>Now, when link lands a jumphe stays in a strange sate that is just his last jump sprite. The fix would be to set the sprite back to link left or link right, but we don&apos;t know which direction he started the jump from. While we could add some bools and figure this out, let&apos;s take a more creative approach. Find the code where link lands on an object below him. Before setting velocity to gravity, if velocity does not equal gravity, set his sprite to down. Like so:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (intersection.Width * intersection.Height &gt; <span class="hljs-number">0</span>) {
+    Position.Y = intersection.Top - Rect.Height;
+    <span class="hljs-keyword">if</span> (velocity != gravity) {
+        SetSprite(<span class="hljs-string">&quot;Down&quot;</span>);
+    }
+    velocity = gravity;
+}
+</code></pre>
+<p>This works because the only time link connects with the ground and has a velocity different from gravity is if he is comming out of a jump. When link falls his velocity is already equal to gravity. One more big bug remains, if you jump and press left or right to move mid jump, link plays his walk animation. Luckily we can fix this using the same trick.</p>
+<p>Find where you set links sprite to left and right, and wrap it in an if statement. The if statement should check if velocity equals gravity (<code>if (velocity == gravity) {</code>) and encompas both the SetSprite call and the Animate call.</p>
+<h3 id="double-jumps">Double Jumps</h3>
+<p>Right now link can jump indefinateley, i think that might actually be called flying at this point! Let&apos;s limit him so he can only do one jump at a time. Now, one jump is a bit tricky, he will be able to jump if he&apos;s on the ground, or mid fall (so long as he is falling from a platform, not a jump). </p>
+<p>The fix here is easy, only add impulse if the players velocity is not the same as gravity. Because the players velocity is only the same as gravity if they are on the ground, or if they are falling from a platform. So find this bit of code:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (i.KeyPressed(OpenTK.Input.Key.Space)) {
+    velocity = impulse;
+    SetSprite(<span class="hljs-string">&quot;Jump&quot;</span>);
+}
+</code></pre>
+<p>And change the if statement to this:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (i.KeyPressed(OpenTK.Input.Key.Space) &amp;&amp; velocity == gravity) {
+</code></pre>
+<h3 id="next">Next</h3>
+<p>We&apos;re almost done! Jumping is mechanically correct and the visuals look decent. The only problem is the &quot;feel&quot; of the jump. It&apos;s a bit floaty for my taste, i also think it could go a tad higher. We&apos;re going to fix that in the next section.</p>
 
                     
                     </section>
@@ -815,7 +1052,7 @@
         <a href="./borders.html" class="navigation navigation-prev " aria-label="Previous page: Screen Borders"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="./Chapter13.html" class="navigation navigation-next " aria-label="Next page: X Clouds"><i class="fa fa-angle-right"></i></a>
+        <a href="./jumpconfig.html" class="navigation navigation-next " aria-label="Next page: Configurable Jumping"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
