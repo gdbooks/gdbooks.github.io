@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>X Limit Scrolling | Introduction</title>
+        <title>Limit Scrolling | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="15.1" data-basepath="." data-revision="Sun Sep 20 2015 04:05:17 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="15.1" data-basepath="." data-revision="Tue Sep 22 2015 01:21:01 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -472,7 +472,7 @@
                         
                             <b>15.1.</b>
                         
-                        X Limit Scrolling
+                        Limit Scrolling
                     </a>
             
             
@@ -738,8 +738,34 @@
                 
                     <section class="normal" id="section-">
                     
-                        <h1 id="chapter-21-more-scrolling">Chapter 21 - More Scrolling</h1>
-<p>This is what my math looks like:</p>
+                        <h1 id="scrolling-with-limits">Scrolling with limits</h1>
+<p>The way we have scrolling implemented right now works fine, but there is one small thing that might (or might not) bother you about it. The edge of the scren! There are three ways games deal with this:</p>
+<ul>
+<li>Add obstacles to edge of screen so there is no black space</li>
+<li>Render black (or other solid color) in blank space (what we do now)</li>
+<li>Stop camera at edge of screen</li>
+</ul>
+<p>In this section we are going to try to stop the camera at the edge of the screen. This means you will be able to walk from wall to wall, and see no background!</p>
+<p>The implementation of this is decievingly simple, it&apos;s all done in <code>Render</code> method  <strong>Game.cs</strong> before anything is actually rendered! All we do is clamp the offsetPosition variable (camera space transformation) in four edge cases. When we calculate offet position:</p>
+<ul>
+<li>If the hero&apos;s world X position is less than 1/2 of the screen with<ul>
+<li>Clamp the xOFfset to 0</li>
+</ul>
+</li>
+<li>If the hero&apos;s world Y position is les than 1/2 the screen height<ul>
+<li>Clamp the yOffset to 0</li>
+</ul>
+</li>
+<li>If heros world X is greater than the world width minus 1/2 screen width<ul>
+<li>Clamp xOffset to world width minus screen width </li>
+</ul>
+</li>
+<li>If heros world Y is greater than the world width minus 1/2 screen height<ul>
+<li>Clamp yOffset to world height minus screen height</li>
+</ul>
+</li>
+</ul>
+<p>As you can see, all we&apos;re doing is not moving the offsetPosition after the hero passes a given point. Because offsetPosition is what transforms world space to camera space this essentially pegs the camera in spots so no corner of the map is off-screen. This is what my math looks like:</p>
 <pre><code class="lang-cs"><span class="hljs-comment">// If the hero is less than half the camera close to the left or top corner</span>
 <span class="hljs-keyword">if</span> (hero.Center.X &lt; <span class="hljs-number">4</span> * tileSize) {
     offsetPosition.X = <span class="hljs-number">0</span>;
@@ -756,7 +782,7 @@
     offsetPosition.Y = (currentMap.Length - <span class="hljs-number">6</span>) * tileSize;
 }
 </code></pre>
-<p>If you run the game there is going to be a visual error. When you are near the edge of the screen one or more of the tiles might be missing! Like this:</p>
+<p>If you <strong>run the game</strong> there is going to be a visual error. When you are near the edge of the screen one or more of the tiles might be missing! Like this:</p>
 <p><img src="Images/visual_error.PNG" alt="ERROR"></p>
 <p>This happens because of <strong>Map.cs</strong>, it limits which tiles are rendered and which are hidden. But it only lets 4 tiles to the left or right. We basically need to double the ammount of visible tiles, this is because we can now walk to the edge of the screen. So find the bit of code that hadnles how much is visible, this code:</p>
 <pre><code class="lang-cs"><span class="hljs-comment">// Find the visible corners of the screen in pixel position</span>
@@ -772,6 +798,7 @@
 <span class="hljs-keyword">int</span> maxX = (<span class="hljs-keyword">int</span>)cameraCenter.X + <span class="hljs-number">8</span> * <span class="hljs-number">30</span> + <span class="hljs-number">30</span>;
 <span class="hljs-keyword">int</span> maxY = (<span class="hljs-keyword">int</span>)cameraCenter.Y + <span class="hljs-number">6</span> * <span class="hljs-number">30</span> + <span class="hljs-number">30</span>;
 </code></pre>
+<p><strong>Run the game</strong> now and you should be able to walk around flawlesly!</p>
 
                     
                     </section>
