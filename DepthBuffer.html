@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>X Depth Buffer | Introduction</title>
+        <title>Depth Buffer | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -25,10 +25,10 @@
         
     
     
-    <link rel="next" href="./PaintersAlgorithm.html" />
+    <link rel="next" href="./Chapter23.html" />
     
     
-    <link rel="prev" href="./SpeerateCollisionAndRendering.html" />
+    <link rel="prev" href="./AddingAHouse.html" />
     
 
         
@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="16.2" data-basepath="." data-revision="Wed Sep 23 2015 03:27:38 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="16.3" data-basepath="." data-revision="Thu Sep 24 2015 04:17:38 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -514,31 +514,31 @@
             
         </li>
     
-        <li class="chapter active" data-level="16.2" data-path="DepthBuffer.html">
+        <li class="chapter " data-level="16.2" data-path="AddingAHouse.html">
+            
+                
+                    <a href="./AddingAHouse.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>16.2.</b>
+                        
+                        Visual Tweaks
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="16.3" data-path="DepthBuffer.html">
             
                 
                     <a href="./DepthBuffer.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>16.2.</b>
-                        
-                        X Depth Buffer
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter " data-level="16.3" data-path="PaintersAlgorithm.html">
-            
-                
-                    <a href="./PaintersAlgorithm.html">
-                
-                        <i class="fa fa-check"></i>
-                        
                             <b>16.3.</b>
                         
-                        X Painters algorithm
+                        Depth Buffer
                     </a>
             
             
@@ -789,7 +789,76 @@
                 
                     <section class="normal" id="section-">
                     
-                        
+                        <h1 id="z-buffer">Z-Buffer</h1>
+<p>The concept of a <a href="https://en.wikipedia.org/wiki/Z-buffering" target="_blank">Z buffer</a> is pretty simple. Everything in the game has thre component coordinates: x, y and z. The game has two buffers, a color buffer and a depth buffer. When you try to draw something, the first thing that happens is the z value is written to the depth buffer. The depth buffer is a black and white image, low z values are black, high z values are white. </p>
+<p>So, the z value is written to the z buffer, the thing is, not every pixel might be written to the z buffer! If the object is partially occluded (if the buffer has lighter pixels over a part of the object), then those values are not written to the z buffer. This is called rejecting the pixel. It&apos;s also called a z test.</p>
+<p>If a pixel fails the z test it is not written into the color buffer. If a pixel passes the z test, it is written into the color buffer.</p>
+<p>This is the general concept of a z-buffer. It&apos;s a pretty important concept, if you are having trouble with it give me a call and we can talk it oer.</p>
+<h3 id="new-project">New Project</h3>
+<p>Let&apos;s make a new project, call it <strong>DepthBuffer</strong> and get this project up to par with the <strong>VisualTweaks</strong> section of the writeup. We&apos;re going to work from here.</p>
+<h3 id="update-graphics-manager">Update Graphics Manager</h3>
+<p>GraphicsManager does not support all the functionality you need to get the project off the ground right now. You can fix this by grabing the latest manager <a href="https://raw.githubusercontent.com/gszauer/2DOpenTKFramework/master/2DFramework/Framework/GraphicsManager.cs" target="_blank">from my github</a> and pasting it into your file.</p>
+<h3 id="existing-depth-buffer">Existing Depth Buffer</h3>
+<p>The graphics frameworks is already using buffers under the hood. When you call <code>GraphicsManager.Instance.ClearScreen(System.Drawing.Color.CadetBlue);</code> in <strong>Program.cs</strong> the depth buffer is cleared to 0 (Pure white). </p>
+<p>Every sprite you draw renders as a quad. Each time you call <code>GraphicsManager.Instance.Draw[String/Square/Line]</code> or <code>TextureManager.Instance.Draw</code>  0.0005f is added to the depth, and the quad is rendered into the depth buffer with the new depth. The closer we get to 1, the darker the depth buffer.</p>
+<p>The depth test passes, and the colors of the quad are drawn to screen.</p>
+<p>Right now the depth test will always pass! This is becuase each time a new quad is rendered it is rendered with a z valu 0.0005f higher than the last one. That is, nothing in the depth buffer will have a higher value (be darker) than the current thing being drawn.</p>
+<p>Here is a screenshot of what our z buffer looks like. Notice how the tiles get darker not only going from top to bottom, but also left to right.</p>
+<p><img src="Images/buffers.PNG" alt="BUFFERS"></p>
+<p>Just for fun, if you want to see the z-buffer for your self, you can add this code to <strong>Game.cs</strong></p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (InputManager.Instance.KeyPressed(OpenTK.Input.Key.Y)) {
+    Image depthBuffer = GraphicsManager.Instance.GetDepthBuffer();
+    depthBuffer.Save(<span class="hljs-string">&quot;depth_buffer.png&quot;</span>, System.Drawing.Imaging.ImageFormat.Png);
+}
+</code></pre>
+<p>With this code in place, every time you press the <strong>Y</strong> button the depth buffer will be saved next to the Asets directory and solution file.</p>
+<h3 id="explicit-depth-buffer">Explicit Depth Buffer</h3>
+<p>The task at hand is to figure out how to sort tiles, enemies, characters and items; then to apply Z values directly. Right now we don&apos;t have controll of the z buffer directly, which is why i updated the Graphics manager with the following functions</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SetDepthRange</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> near, <span class="hljs-keyword">float</span> far</span>)
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">IncreaseDepth</span>(<span class="hljs-params"></span>)
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">IncreaseDepth</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> step</span>)
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SetDepth</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> depth</span>)
+</span></code></pre>
+<ul>
+<li><strong>SetDepthRange</strong> - Unlike the X and Y axis, our depth is not infinite! We need to define a range for it<ul>
+<li>Takes a near value and a far value. Configures depth buffer to use said values</li>
+</ul>
+</li>
+<li><strong>IncreaseDepth</strong> - This is what GraphicsManager has been using internally this whole time.<ul>
+<li>Increases current depth by 0.0005f </li>
+</ul>
+</li>
+<li><strong>IncreaseDepth(float)</strong> - The stock increase might not be enough. We may want to increase depth in smaller steps<ul>
+<li>Increases depth by the value of the argument provided </li>
+</ul>
+</li>
+<li><strong>SetDepth</strong> - Increase depth can only go forward, we may need to set depth to 3 after it was 5<ul>
+<li>Allows us to hard code the depth value for the next draw call</li>
+</ul>
+</li>
+</ul>
+<p>Out of all these functions, we only need SetDepth. Before rendering a tile or the character or anything we&apos;re going to explicitly set it&apos;s z-depth by calling <strong>SetDepth</strong>. This way we can be in total controll! The only question is, how to we figure out the depth of a thing (tile, character, item, etc...)??? Oh, and what resolution depth buffer do we need?</p>
+<p>The image of the depth buffer we saw in the last section on this page actually gives us a pretty decent strategy for dealing with depth. The further down something is the higher it&apos;s depth. The further right something is, the higher it&apos;s depth!</p>
+<p>Here is what i propose. We will pick two numbers, one for the maximum height we might render and one for the maximum width we might render. For demonstration purposes, lets say height of 6, width of 7. Our depth range is going to be height <em> width + 1 or 6 </em> 7 + 1. The depth of each indevidual tile? <strong>y * 7 + x</strong>. 7 being the width. This ensures that each row starts on a multiple of 7, and we just increase on the way up.</p>
+<p>Here is a visual demonstration using a height of 8 and a width of 10 (even tough only a width of 8 is displayed). It&apos;s ok to have extra tiles, a little saftey padding never hurt anybody.</p>
+<p><img src="Images/index_grid.png" alt="GRID"></p>
+<h3 id="real-world-values">Real World Values</h3>
+<p>So now that we know how to get the depth of each tile, and the depth range, what should it be for our game?!?!? Take a look at the <strong>Render</strong> function of <strong>Map.cs</strong> our width rendering ranges from -8 to +8, and our height rendering ranges from -6 to + 6. We also add one extra tile (the + 30) for padding. This means we have 17 tiles accross and 13 tiles up and down. </p>
+<p>Let&apos;s round those numbers up to the nearest ten. Make the <strong>depth range = 0, 21 x 21</strong>. The depth function for each tile is going to be <strong>y * 20 + x</strong>. Wait, whats the extra 1 for? We did 21 x 21 but are only calculating with 20.... That extra 1 is padding. It&apos;s a good idea to add a little bit.</p>
+<p>Set the depth range in the Initialize function of <strong>Game.cs</strong></p>
+<h3 id="implementation">Implementation</h3>
+<p><strong>Hint</strong>: all depth should be set based on <strong>WORLD SPACE</strong>, not camera space.</p>
+<p>I&apos;m going to leave implementation a little bit open ended. I&apos;ll make suggestions on where to call the <strong>SetDepth</strong> function, but you are welcome to call it anywhere.</p>
+<p><strong>For Tiles</strong>, set the depth for each tile in <strong>Map.cs</strong>, right before calling <code>tileMap[h][w].Render(offsetPosition)</code>. You can easily find the depth by doing <code>h * 20 + w</code></p>
+<p><strong>For Characters</strong>, in the <code>Render</code> function of <strong>Character.cs</strong>. Set the depth based on the Bottom Right corner of the character. Remember, the bottom right is not measured in tiles, so you have to convert it to tiles.</p>
+<p><strong>Hint</strong>, Bottom right is misleading. When the players collision is corrected, technically his bottom right is one tile lower than what we want to be checking. Adjust Y by 1 pixel up, like so: <code>((int)Corners[CORNER_BOTTOM_RIGHT].Y - 1)</code> that way you get the exact foot tile!</p>
+<p><strong>Hint</strong>, add 0.5 to the depth to ensure that the player renders on top of the tiles. Like this <code>GraphicsManager.Instance.SetDepth(y_tile * 20 + x_tile + 0.5f)</code>, that tiny boost just makes sure that we are rendered on top of the current tile.</p>
+<p><strong>Run the game</strong>, you should be able to walk around. Notice how your character can walk below the roof of the house and above the obstacles:</p>
+<p><img src="Images/zdepth.png" alt="Z_DEPTH"></p>
+<p><strong>For Items</strong> Do the same thing you did for the player. Instead of adding 0.5f to it, add an offset of 0.2f</p>
+<p><strong>For Projectiles</strong>, in <strong>Game.cs</strong> find where you render each projectile with <code>projectiles[i].Render(offsetPosition);</code> and before that set the depth to 19*19. We set it super high because these projectiles should be rendering above everything!</p>
+<p>Lastly, in <strong>Game.cs</strong> before hte game over check (this line): <code>if (GameOver) {</code> make sure to set the depth to <strong>20*20</strong>, to make sure that all game over text renders above the game</p>
+
                     
                     </section>
                 
@@ -799,10 +868,10 @@
         </div>
 
         
-        <a href="./SpeerateCollisionAndRendering.html" class="navigation navigation-prev " aria-label="Previous page: Collision &amp; Rendering"><i class="fa fa-angle-left"></i></a>
+        <a href="./AddingAHouse.html" class="navigation navigation-prev " aria-label="Previous page: Visual Tweaks"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="./PaintersAlgorithm.html" class="navigation navigation-next " aria-label="Next page: X Painters algorithm"><i class="fa fa-angle-right"></i></a>
+        <a href="./Chapter23.html" class="navigation navigation-next " aria-label="Next page: X Ismetric View"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>

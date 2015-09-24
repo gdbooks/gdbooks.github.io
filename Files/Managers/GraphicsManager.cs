@@ -1,9 +1,4 @@
-#Graphics Manager
-
-In case the code repo ever goes down, this is a local backup of the **GraphicsManager** class
-
-```cs
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
@@ -4467,4 +4462,3 @@ namespace GameFramework {
 };
     }
 }
-```

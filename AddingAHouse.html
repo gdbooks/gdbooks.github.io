@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>Why Tiles? | Introduction</title>
+        <title>Visual Tweaks | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -25,10 +25,10 @@
         
     
     
-    <link rel="next" href="./Chapter3.html" />
+    <link rel="next" href="./DepthBuffer.html" />
     
     
-    <link rel="prev" href="./Program.html" />
+    <link rel="prev" href="./SpeerateCollisionAndRendering.html" />
     
 
         
@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="2" data-basepath="." data-revision="Thu Sep 24 2015 04:17:38 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="16.2" data-basepath="." data-revision="Thu Sep 24 2015 04:17:38 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -132,7 +132,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="2" data-path="Chapter2.html">
+        <li class="chapter " data-level="2" data-path="Chapter2.html">
             
                 
                     <a href="./Chapter2.html">
@@ -514,7 +514,7 @@
             
         </li>
     
-        <li class="chapter " data-level="16.2" data-path="AddingAHouse.html">
+        <li class="chapter active" data-level="16.2" data-path="AddingAHouse.html">
             
                 
                     <a href="./AddingAHouse.html">
@@ -789,16 +789,77 @@
                 
                     <section class="normal" id="section-">
                     
-                        <h1 id="why-tiles">Why Tiles</h1>
-<p>Before delving into how to make tile based games, why do we use tiles to being with? Are they easier to make than their free form counterparts? Do they run faster? Is C# even a good candidate to make tile based games?</p>
-<p>Tile based games came about back in the olden days of computing. When processor speeds where counted in megahertz, not gigahertz. When memory was kilobytes not megabytes. The limitation of memory and processing power kept programmers from being able to display a 512 x 512 sprite while keeping framerates reasonable. </p>
-<p>Without being able to display large textures how can one draw a nice background? Slice the picture up into tiles! You don&apos;t need to waste memory on areas of the background that look the same.</p>
-<p><img src="Images/tut00_1.gif" alt="SCREEN1"></p>
-<p>In the picture you can see that parts of picture are exactly same. 1 is same as 2, 3 is same with 4 and parts 5-7 are all same thing. If you slice up the picture and reuse same parts in different areas, you have created the tiles. By only storing tiles we save both disk space and memory.</p>
-<p>An unexpected side effect of using tiles is how easy they make it to update your game. If you are making a huge level and realize that you don&apos;t want to have the town in the lower left corner of the map, rather the upper right you can edit the tile map without having to edit any images. The dynamic nature of tiles makes developing games with tiles much faster, putting far less stress on the need of art support.</p>
-<h1 id="c-and-tiles">C# And Tiles</h1>
-<p>With modern hardware we can render thousands if not millions of polygons and textures at the same time. There is no practical need for tiles when we could just render huge maps. So why use tiles at all? Aside from the ease of development tiles provide a distinct retro art style. Also, the concepts of tile based games will be useful for developing any type of game.</p>
-<p>C# isn&apos;t a particularly bad or good fit for tiles. It supports multidimensional (jagged) arrays and the ability to draw sprites. That&apos;s really all you need to create tile based games. With that in mind, let&apos;s jump in and get started.</p>
+                        <h1 id="visual-tweaks">Visual Tweaks</h1>
+<p>Before moving on to the next section i feel like we need to do some house cleaning. There are a few things i want to change in the code in order to add houses that have depth to them visually. Also, while reviewing your code i found a bug that was made because i gave bad instructions in the last tutorial section.</p>
+<p>Do all the work for this section in the <strong>DepthBase</strong> project from the last section.</p>
+<p>Let&apos;s start off by updating our <strong>HouseTiles.png</strong> to the following image:</p>
+<p><img src="Images/HouseTiles_Expanded.png" alt="MORE_TILES"></p>
+<p>Edit <code>spriteSources</code> in <strong>Game.cs</strong> to include some of the new tiles. I went ahead and measured these out for you:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">protected</span> Rectangle[] spriteSources = <span class="hljs-keyword">new</span> Rectangle[] {
+    <span class="hljs-comment">/* 0*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">466</span>,<span class="hljs-number">32</span>,<span class="hljs-number">30</span>,<span class="hljs-number">30</span>),
+    <span class="hljs-comment">/* 1*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">466</span>,<span class="hljs-number">1</span>,<span class="hljs-number">30</span>,<span class="hljs-number">30</span>),
+    <span class="hljs-comment">/* 2*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">32</span>,<span class="hljs-number">187</span>,<span class="hljs-number">30</span>,<span class="hljs-number">30</span>),
+    <span class="hljs-comment">/* 3*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">32</span>,<span class="hljs-number">280</span>,<span class="hljs-number">30</span>,<span class="hljs-number">40</span>), <span class="hljs-comment">// Top-left</span>
+    <span class="hljs-comment">/* 4*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">63</span>,<span class="hljs-number">280</span>,<span class="hljs-number">30</span>,<span class="hljs-number">40</span>), <span class="hljs-comment">// Top-middle</span>
+    <span class="hljs-comment">/* 5*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">94</span>,<span class="hljs-number">280</span>,<span class="hljs-number">30</span>,<span class="hljs-number">40</span>), <span class="hljs-comment">// Top-right</span>
+    <span class="hljs-comment">/* 6*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">32</span>,<span class="hljs-number">321</span>,<span class="hljs-number">30</span>,<span class="hljs-number">30</span>), <span class="hljs-comment">// Middle-left</span>
+    <span class="hljs-comment">/* 7*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">63</span>,<span class="hljs-number">321</span>,<span class="hljs-number">30</span>,<span class="hljs-number">30</span>), <span class="hljs-comment">// Middle-middle</span>
+    <span class="hljs-comment">/* 8*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">94</span>,<span class="hljs-number">321</span>,<span class="hljs-number">30</span>,<span class="hljs-number">30</span>), <span class="hljs-comment">// Middle-right</span>
+    <span class="hljs-comment">/* 9*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">32</span>,<span class="hljs-number">352</span>,<span class="hljs-number">30</span>,<span class="hljs-number">30</span>),
+    <span class="hljs-comment">/*10*/</span><span class="hljs-keyword">new</span> Rectangle(<span class="hljs-number">63</span>,<span class="hljs-number">352</span>,<span class="hljs-number">30</span>,<span class="hljs-number">30</span>)
+};
+</code></pre>
+<p>Also, change the layout of room 1 to include the new building. Like so:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">int</span>[][] room1Layout = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[][] {
+    <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> },
+    <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+    <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+    <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>, <span class="hljs-number">8</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+    <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">9</span>,<span class="hljs-number">10</span>, <span class="hljs-number">9</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">2</span> },
+    <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> },
+    <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+    <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+    <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> },
+    <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[] { <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span> }
+};
+</code></pre>
+<p>After having made these changes <strong>Run the game</strong>, you will notice two errors. First, the bannana is stuck in a building wall. Second, the roof of the building is rendered wrong! This is what it looks like for me:</p>
+<p><img src="Images/building_banana.PNG" alt="BANANA"></p>
+<p>The first one is easy, find where we add the bannana and move it&apos;s x index from 3 to 4. Fixing the rendering artifact is a little more involved as we have to build a mental model of what&apos;s wrong. First, open up <strong>Tile.cs</strong> and take a look at this section of the <code>Render</code> method:</p>
+<pre><code class="lang-cs">Rectangle renderRect = <span class="hljs-keyword">new</span> Rectangle(Source.Location, Source.Size);
+<span class="hljs-keyword">if</span> (renderRect.Height != <span class="hljs-number">30</span>) {
+    <span class="hljs-keyword">int</span> difference = renderRect.Height - <span class="hljs-number">30</span>;
+    renderRect.Y -= difference; <span class="hljs-comment">// This is a bug!</span>
+}
+</code></pre>
+<p>The line where we change renderRect.Y is inheritly wrong. This is my fault, i told you to change the wrong variable in the last tutorial. What you actually want to change is <code>renderPos.Y</code>. It makes sense when we thing about it, renderRect is not the position on screen, it&apos;s the rectangle to use from the sprite sheet. We don&apos;t want to mess with the source sprite, only the render position!</p>
+<p>Running the game now, it&apos;s still messed up. The height and y of the tile is just not set properly! So let&apos;s track down where the height and Y are configured, take a look at the <code>constructor</code> of <strong>Map.cs</strong>. The issue is in this block of code:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; layout[i].Length; j++) {
+    Rectangle source = sources[layout[i][j]];
+
+    Point worldPosition = <span class="hljs-keyword">new</span> Point();
+    worldPosition.X = (<span class="hljs-keyword">int</span>)(j * source.Width);
+    worldPosition.Y = (<span class="hljs-keyword">int</span>)(i * source.Height);
+    result[i][j] = <span class="hljs-keyword">new</span> Tile(sheets, source);
+    result[i][j].Walkable = <span class="hljs-keyword">false</span>;
+    result[i][j].IsDoor = <span class="hljs-keyword">false</span>;
+    result[i][j].WorldPosition = worldPosition;
+    result[i][j].Scale = scale;
+    <span class="hljs-keyword">foreach</span> (<span class="hljs-keyword">int</span> w <span class="hljs-keyword">in</span> walkable) {
+        <span class="hljs-keyword">if</span> (layout[i][j] == w) {
+            tileMap[i][j].Walkable = <span class="hljs-keyword">true</span>;
+        }
+    }
+}
+</code></pre>
+<p>The problem is where we calculate worldPosition.X and worldPosition.Y. We multiply i and j by the source tile width and height. This of course assumes that all tiles are going to be uniform sized, an assumption we just broke! Instead we need to hard code the tile size, like so:</p>
+<pre><code class="lang-cs"> Point worldPosition = <span class="hljs-keyword">new</span> Point();
+worldPosition.X = (<span class="hljs-keyword">int</span>)(j * <span class="hljs-number">30</span>);
+worldPosition.Y = (<span class="hljs-keyword">int</span>)(i * <span class="hljs-number">30</span>);
+</code></pre>
+<p>There is one last think i&apos;d like to address. If you collect an item and close the game you get a yellow warning in the console about an unreleased texture. This only happens when you collect an item. That tells me that at the point when we remove the item from the map, you don&apos;t release it&apos;s texture. Go ahead and fix this.</p>
+<p>Now we&apos;re good to go to the next section! If you run the game you will be able to walk on the top 10 pixels of one of the houses, this is expected behaviour. In the next section we&apos;re going to add proper depth sorting to make it look like you are behind the house. Until then, this is what your game will probably look like at this point:</p>
+<p><img src="Images/fiddler_on_the_roof.PNG" alt="FIDDLER"></p>
 
                     
                     </section>
@@ -809,10 +870,10 @@
         </div>
 
         
-        <a href="./Program.html" class="navigation navigation-prev " aria-label="Previous page: Program"><i class="fa fa-angle-left"></i></a>
+        <a href="./SpeerateCollisionAndRendering.html" class="navigation navigation-prev " aria-label="Previous page: Collision &amp; Rendering"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="./Chapter3.html" class="navigation navigation-next " aria-label="Next page: Map Format"><i class="fa fa-angle-right"></i></a>
+        <a href="./DepthBuffer.html" class="navigation navigation-next " aria-label="Next page: Depth Buffer"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
