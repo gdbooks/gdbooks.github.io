@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>X Ismetric View | Introduction</title>
+        <title>Ismetric View | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -25,7 +25,7 @@
         
     
     
-    <link rel="next" href="./Chapter24.html" />
+    <link rel="next" href="./Iso_MakeMap.html" />
     
     
     <link rel="prev" href="./DepthBuffer.html" />
@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="17" data-basepath="." data-revision="Thu Sep 24 2015 04:17:38 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="17" data-basepath="." data-revision="Sat Sep 26 2015 04:29:47 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -558,9 +558,60 @@
                         
                             <b>17.</b>
                         
-                        X Ismetric View
+                        Ismetric View
                     </a>
             
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="17.1" data-path="Iso_MakeMap.html">
+            
+                
+                    <a href="./Iso_MakeMap.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.1.</b>
+                        
+                        Map
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="17.2" data-path="Iso_MakeCharacters.html">
+            
+                
+                    <a href="./Iso_MakeCharacters.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.2.</b>
+                        
+                        X Characters
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="17.3" data-path="Iso_MakeItems.html">
+            
+                
+                    <a href="./Iso_MakeItems.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.3.</b>
+                        
+                        X Items &amp; Projectiles
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -789,9 +840,64 @@
                 
                     <section class="normal" id="section-">
                     
-                        <h1 id="chapter-23-isometric-view">Chapter 23 - Isometric View</h1>
-<p><a href="http://gamedevelopment.tutsplus.com/tutorials/creating-isometric-worlds-a-primer-for-game-developers--gamedev-6511" target="_blank">http://gamedevelopment.tutsplus.com/tutorials/creating-isometric-worlds-a-primer-for-game-developers--gamedev-6511</a></p>
-<p><a href="http://www.gotoandplay.it/_articles/2007/03/isometric.php" target="_blank">http://www.gotoandplay.it/_articles/2007/03/isometric.php</a></p>
+                        <h1 id="isometric-view">Isometric View</h1>
+<p>Isometric worlds are great, they can add a lot of depth and visual appeal to a simple tile based game. Just look at Diablo 2, or Starcraft 1! </p>
+<p>There are some <a href="http://gamedevelopment.tutsplus.com/tutorials/creating-isometric-worlds-a-primer-for-game-developers--gamedev-6511" target="_blank">great resources</a> online that really get into the nitty gritty of how isometric views work. They are worth a read.</p>
+<p>Movement in an iso world doesn&apos;t have to be smooth. I think <a href="http://www.gotoandplay.it/_articles/2007/03/isometric.php" target="_blank">This</a> demo fels awesome, and the character is snapped to a grid the whole time! Of course we are going to have smooth movement in our version.</p>
+<p>Depth buffering is very important for an isometric scene. The draw order really, really matters! A Lot!</p>
+<h3 id="new-project">New Project</h3>
+<p>Let&apos;s make a new project, call it <strong>Isometric</strong> and get this project up to par with the <strong>DepthBuffer</strong> section of the writeup. We&apos;re going to work from here.</p>
+<h3 id="tiles">Tiles</h3>
+<p>So, how do we go from square tiles to isometric tiles? Simple, rotate by 45 degrees and scale height by 1/2 (0.5f). Like so:</p>
+<p><img src="Images/tut16a.gif" alt="TUT16A"></p>
+<p>Take note that even tough the height of the tile changes, the width is untouched. We <em>could</em> do this in code, but we <em>should not</em>. Instead rely on artists to provide art assets! </p>
+<p>Speaking of art assets, i made a new tile sheet, we are going to use this sheet for isometric tutorials. Save it to your &quot;Assets&quot; folder, make sure to call it <strong>isometric.png</strong>.</p>
+<p><img src="Images/isometric.png" alt="ISO"></p>
+<p>The positioning of the tiles on the source image is very, very important! The origin of each tile must line up. Remember how in the depth section we have a few tiles that where taller than 30? This is the same concept. Take a look:</p>
+<p><img src="Images/tut16b.gif" alt="TUT16B"></p>
+<p>Notice how in the top, the registration point for both the flat and tall tiles are in the same spot? If we where to use a flat tile as the base of the tall tile, that&apos;s where the tip would be (On the y axis).</p>
+<p>Same thing with player, we place him on top of the flat diamond, his registration point is where the tip of the tile would be (On the y axis).</p>
+<p>Everything is set up relative to a base tile, in this case the base tile is just a flat outline. If you want to sprouce up the artwork you can follow some <a href="http://www.2dgameartguru.com/2012/02/building-isometric-art-in-vectors-step.html" target="_blank">tutorials</a> to figure out how to make iso graphics... Or just <a href="http://www.spriters-resource.com/pc_computer/diablo2diablo2lordofdestruction/" target="_blank">rip them</a> from a Diablo game</p>
+<p>So, when rotating these tiles, what direction becomes which direction? The way i think about it is that we are doing a counter clockwise rotation. Like so (Each side is numbered):</p>
+<p><img src="Images/the_isometric_grid.jpg" alt="ROTATE"></p>
+<h3 id="coordinates">Coordinates</h3>
+<p>At the core of any isometric engine is being able to convert from cartesian coordinates to isometric coordinates. The top-down view we&apos;ve been using up until now.</p>
+<p>Atop down view grid is called cartesian coordinate system. The perspective view grid we are building is no longer using a cartesian coordinate system, it is going to be using an isometric one.</p>
+<p>How to convert from <strong>cartesian to isometric</strong>?</p>
+<ul>
+<li>isoX = cartX - cartY;</li>
+<li>isoY = (cartX + cartY) / 2;</li>
+</ul>
+<p>That&apos;s a nifty trick, how about going from <strong>isometric to cartesian</strong>?</p>
+<ul>
+<li>cartX = (2 * isoY + isoX) / 2;</li>
+<li>cartY = (2 * isoY - isoX) / 2;</li>
+</ul>
+<p>Why do we need to convert both ways? I don&apos;t know if we <em>need</em> to at this point yet. But we are going to keep doing updates in world space. Only the view is changine to cartesian, not the logic!</p>
+<h3 id="layout-size">Layout &amp; Size</h3>
+<p>It may not immediateley be obvious how iso tiles are rendered. As an example, let&apos;s see where ROW 0 is on an iso map:</p>
+<p><img src="Images/row0.png" alt="ROW0"></p>
+<p>The positioning of the tiles can also be misleading. This is because the registration points are not always where you expect them to be. </p>
+<p>In order to draw the second tile of row 0, we had to go 1/2 the width of the first tile on the X and the height of the first tile on the Y. Like so: </p>
+<p><img src="Images/iso_size.png" alt="SIZE"></p>
+<p>This means that on an iso map, if a tile&apos;s source rect is <code>Rectangle(120, 166, 138, 70),</code>, then:</p>
+<ul>
+<li>Tile Height = 70</li>
+<li>Tile Width = 69<ul>
+<li>138 / 2 = 69 </li>
+</ul>
+</li>
+</ul>
+<h3 id="on-your-own">On Your Own</h3>
+<p>Add these functions to <strong>Map.cs</strong></p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> PointF <span class="hljs-title">CartToIso</span>(<span class="hljs-params">PointF cartesian</span>) </span>{
+    <span class="hljs-comment">// <span class="hljs-doctag"><span class="hljs-keyword">TODO</span></span></span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> PointF <span class="hljs-title">IsoToCart</span>(<span class="hljs-params">PointF isometric</span>) </span>{
+    <span class="hljs-comment">// <span class="hljs-doctag"><span class="hljs-keyword">TODO</span></span> </span>
+}
+</code></pre>
 
                     
                     </section>
@@ -805,7 +911,7 @@
         <a href="./DepthBuffer.html" class="navigation navigation-prev " aria-label="Previous page: Depth Buffer"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="./Chapter24.html" class="navigation navigation-next " aria-label="Next page: X Mouse To Move"><i class="fa fa-angle-right"></i></a>
+        <a href="./Iso_MakeMap.html" class="navigation navigation-next " aria-label="Next page: Map"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>

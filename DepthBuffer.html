@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="16.3" data-basepath="." data-revision="Thu Sep 24 2015 04:17:38 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="16.3" data-basepath="." data-revision="Sat Sep 26 2015 04:29:47 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -558,9 +558,60 @@
                         
                             <b>17.</b>
                         
-                        X Ismetric View
+                        Ismetric View
                     </a>
             
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="17.1" data-path="Iso_MakeMap.html">
+            
+                
+                    <a href="./Iso_MakeMap.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.1.</b>
+                        
+                        Map
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="17.2" data-path="Iso_MakeCharacters.html">
+            
+                
+                    <a href="./Iso_MakeCharacters.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.2.</b>
+                        
+                        X Characters
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="17.3" data-path="Iso_MakeItems.html">
+            
+                
+                    <a href="./Iso_MakeItems.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.3.</b>
+                        
+                        X Items &amp; Projectiles
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
             
         </li>
     
@@ -842,6 +893,8 @@
 <p>Here is what i propose. We will pick two numbers, one for the maximum height we might render and one for the maximum width we might render. For demonstration purposes, lets say height of 6, width of 7. Our depth range is going to be height <em> width + 1 or 6 </em> 7 + 1. The depth of each indevidual tile? <strong>y * 7 + x</strong>. 7 being the width. This ensures that each row starts on a multiple of 7, and we just increase on the way up.</p>
 <p>Here is a visual demonstration using a height of 8 and a width of 10 (even tough only a width of 8 is displayed). It&apos;s ok to have extra tiles, a little saftey padding never hurt anybody.</p>
 <p><img src="Images/index_grid.png" alt="GRID"></p>
+<p>Here is another example of what we are trying to do:</p>
+<p><img src="Images/flatten_array.png" alt="EXAMPLE"></p>
 <h3 id="real-world-values">Real World Values</h3>
 <p>So now that we know how to get the depth of each tile, and the depth range, what should it be for our game?!?!? Take a look at the <strong>Render</strong> function of <strong>Map.cs</strong> our width rendering ranges from -8 to +8, and our height rendering ranges from -6 to + 6. We also add one extra tile (the + 30) for padding. This means we have 17 tiles accross and 13 tiles up and down. </p>
 <p>Let&apos;s round those numbers up to the nearest ten. Make the <strong>depth range = 0, 21 x 21</strong>. The depth function for each tile is going to be <strong>y * 20 + x</strong>. Wait, whats the extra 1 for? We did 21 x 21 but are only calculating with 20.... That extra 1 is padding. It&apos;s a good idea to add a little bit.</p>
@@ -871,7 +924,7 @@
         <a href="./AddingAHouse.html" class="navigation navigation-prev " aria-label="Previous page: Visual Tweaks"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="./Chapter23.html" class="navigation navigation-next " aria-label="Next page: X Ismetric View"><i class="fa fa-angle-right"></i></a>
+        <a href="./Chapter23.html" class="navigation navigation-next " aria-label="Next page: Ismetric View"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>
