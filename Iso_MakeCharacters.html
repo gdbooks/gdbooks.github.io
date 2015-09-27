@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>X Characters | Introduction</title>
+        <title>Characters | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="17.2" data-basepath="." data-revision="Sat Sep 26 2015 04:29:47 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="17.2" data-basepath="." data-revision="Sun Sep 27 2015 07:44:13 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -589,7 +589,7 @@
                         
                             <b>17.2.</b>
                         
-                        X Characters
+                        Characters
                     </a>
             
             
@@ -660,44 +660,14 @@
             
         </li>
     
-        <li class="chapter " data-level="21" data-path="Chapter27.html">
-            
-                
-                    <a href="./Chapter27.html">
-                
-                        <i class="fa fa-check"></i>
-                        
-                            <b>21.</b>
-                        
-                        X Rotating Hero
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter " data-level="22" data-path="Chapter28.html">
-            
-                
-                    <a href="./Chapter28.html">
-                
-                        <i class="fa fa-check"></i>
-                        
-                            <b>22.</b>
-                        
-                        X Rotating Ground
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter " data-level="23" data-path="Chapter29.html">
+        <li class="chapter " data-level="21" data-path="Chapter29.html">
             
                 
                     <a href="./Chapter29.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>23.</b>
+                            <b>21.</b>
                         
                         X Slopes
                     </a>
@@ -705,14 +675,14 @@
             
         </li>
     
-        <li class="chapter " data-level="24" data-path="Chapter30.html">
+        <li class="chapter " data-level="22" data-path="Chapter30.html">
             
                 
                     <a href="./Chapter30.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>24.</b>
+                            <b>22.</b>
                         
                         X Hexagons
                     </a>
@@ -720,14 +690,14 @@
             
         </li>
     
-        <li class="chapter " data-level="25" data-path="Chapter7.html">
+        <li class="chapter " data-level="23" data-path="Chapter7.html">
             
                 
                     <a href="./Chapter7.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>25.</b>
+                            <b>23.</b>
                         
                         X More Tiles
                     </a>
@@ -840,7 +810,79 @@
                 
                     <section class="normal" id="section-">
                     
-                        
+                        <h1 id="characters">Characters</h1>
+<p>Moving the characters into an isometric view might be a bit of a challenge. We&apos;re going to have to refactor far more code here than in the previous sections of the tutorial.</p>
+<p>While doing all of this, keep in mind we are not doing collisions or any logic in an isometric space. Isometric is only a view, we still handle collisions and items in world space. </p>
+<p>Recall there are three important spaces: world space, camera space and screen space. Applying an isometric projection only changes the camera space. &quot;Applying an isometric projection&quot; might sound fancy, but reality, that&apos;s what the <code>CartToIso</code> in <strong>Map.cs</strong> does.</p>
+<h3 id="rendering-world-space">Rendering World Space</h3>
+<p>Because we&apos;re doing all our logic in world space debugging will be a lot easyer if we can also see world space! If a collision looks wrong, it happens in an isometric view, but not in a top down view of world space then we know that the issue is render code and not collision code.</p>
+<p>First, let&apos;s make a new variable in <strong>Game.cs</strong>. A public, static bool. Call it <code>ViewWorldSpace</code> and set it to false by default.</p>
+<p>Update the <code>Update</code> function of <strong>Game.cs</strong>. Pick any key (I suggest &apos;U&apos;), when that key is pressed toggle the <code>ViewWorldSpace</code> boolean.</p>
+<p>In the <code>Render</code> function find where offsetPosition.X and Y are hard coded. Wrap that bit of code in an if statment, we only want to hard code the X and Y if <code>ViewWorldSpace</code> is <strong>false</strong></p>
+<p>Next, let&apos;s undo the isometric projection. In <strong>Map.cs</strong> find the  <code>CartToIso</code> and <code>IsoToCart</code> functions. If <code>Game.ViewWorldSpace</code> is true, return the arguments without any modification.</p>
+<p>Last, we need to make a slight modification to the rendering code of <strong>Tile.cs</strong>. If <code>Game.ViewWorldSpace</code> is true, Draw a rectangle. The Location of the rectangle is going to be <code>WorldPosition</code>, while it&apos;s size is going to be 69 x 70. (69 is 1/2 the width of each tile, 70 is the height of each tile). Thse are the numbers we set up in the constructor of <strong>Map.cs</strong> for the size and position of tiles. If <code>Game.ViewWorldSpace</code> is false, render everything as usual.</p>
+<p>Further more, when <code>```Game.ViewWorldSpace</code> is true and we render a rectangle, if the tile is walkable render the rectangle in <code>Color.LightSteelBlue</code>, otherwise render it in <code>Color.LightSlateGray</code>.</p>
+<p><strong>Run the game</strong> and toggle the display. Your non-isometric world view should look like this:</p>
+<p><img src="Images/non_iso.PNG" alt="NON_ISO"></p>
+<h3 id="no-more-30">No more 30</h3>
+<p>Now that we can view world space just fine, we notice that the size of the world space tiles is MUCH larger than the size of our player and enemy tiles. Let&apos;s go ahead and fix this next.</p>
+<p>The sizing issue happens because the map is rendering with our worlds current tile size, while the character an enemy have 30 hard coded for the tile size. That&apos;s no-bueno.</p>
+<p>We have a global define in <strong>Game.cs</strong>, find the <code>tileSize</code> global variable and delete it. In it&apos;s place, add these two new defines:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> <span class="hljs-keyword">int</span> TILE_W = <span class="hljs-number">69</span>; <span class="hljs-comment">// 138 / 2</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> <span class="hljs-keyword">int</span> TILE_H = <span class="hljs-number">70</span>; <span class="hljs-comment">// 70</span>
+</code></pre>
+<p>We just caused a lot of compiler errors be removing <code>tileSize</code>, go ahead and fix these. Instead of <code>tileSize</code>, use <code>TILE_W</code> and <code>TILE_H</code> wherever appropriate. Appy H to Y values and W to X values.</p>
+<p>Now it&apos;s time to replace EVERY OTHER INSTANCE of 30. Search the entire project <em>(Control + shift + F)</em> for <strong>30</strong>, replace every instance with TILE_W or TILE_H, depending on which one is appropriate.</p>
+<p>Update the constructor of <strong>Map.cs</strong> to use the constants from <code>Game</code>, instead of hard coding 138 / 2 and 70.</p>
+<p>In <strong>Tile.cs</strong> we hard coded the debug render size to 69x70. Switch these to be the constants in <code>Game.cs</code>, also, there is a height text of 70 hard coded in there, change that 70 to <code>Game.TILE_H</code>.</p>
+<p><strong>Run the game</strong>, if you switch into debug view, even tough link is the wrong size he can walk around the map. He just looks small. Confirm that collision and shooting work before moving on to the next section.</p>
+<h4 id="display-the-character">Display the Character</h4>
+<p>Let&apos;s take a little bit of time to refactor <strong>Character.cs</strong>. The first thing i&apos;m going to do is remove the code that renders the debug yellow square at the characters registration point.</p>
+<p>Next, we&apos;re going to updat the character sprites. In <strong>PlayerCharacter.cs</strong> and in <strong>EnemyCharacter.cs</strong>, change the sprite sources to:</p>
+<ul>
+<li>AddSprite(&quot;Down&quot;, new Rectangle(52, 19, 85, 84)); </li>
+<li>AddSprite(&quot;Up&quot;, new Rectangle(266, 19, 85, 84)); </li>
+<li>AddSprite(&quot;Left&quot;, new Rectangle(155, 19, 85, 84)); </li>
+<li>AddSprite(&quot;Right&quot;, new Rectangle(375, 19, 85, 84)); </li>
+</ul>
+<p>Back in <strong>Character.cs</strong>, let&apos;s go ahead and project these characters into an isometric space. In the <code>Render</code> method after the offset is applyed to <code>renderPosition</code>, but before the y correction takes place go ahead and call <code>Map.CartToIso</code>. </p>
+<p><code>MapCartToIso</code> will transform <code>renderPosition</code> from a cartesian space into an isometric space. Do this the same way you have already done it for <strong>Tile.cs</strong></p>
+<p>Lastly, back in <strong>Game.cs</strong>, go ahead and change <code>heroSheet</code> and <code>npcSheet</code> to point to the isometric sprite sheet. </p>
+<p><strong>Run the game</strong>, the isometric view should look pretty close to correct. Moving around is going to be broken, but visually it&apos;s close to good. We&apos;re going to just ignore z-fighting issues for now. This is what your game should look like:</p>
+<p><img src="Images/dont_move.PNG" alt="DONT_MOVE"></p>
+<h3 id="moving-the-character">Moving the character</h3>
+<p>If the moving code is broken, then it&apos;s broken in a few places. Switch to the overhead view and see if movement is broken... Well it&apos;s not really broken, but it&apos;s also not correct. We should only see squares in this view, not sprites. </p>
+<p>In <strong>character.cs</strong>, update the render method so if <code>Game.ViewWorldSpace</code> is true, we draw a square (use the Rect getter for it&apos;s rectangle), make it <code>Color.SteelBlue</code>. If <code>Game.ViewWorldSpace</code> is false, draw the texture as usual.</p>
+<p>Looking at our new debug render, the errors are quiet obvious! The player is bigger (wider) than the floor tiles. That&apos;s a pretty big no-no. And how exactly does the size in this screen translate to the size of the iso sprite? After all the iso sprite only takes up a part of each tile.</p>
+<p>Just like the size of each tile is no longer the same as the size of it&apos;s sprite, the isometric size of the player tile is not the same as the size of its sprite. We have to apply the same transform to player as we do to tiles, so we are going to cut his width in half. How about the height? We will just make it the same as his width... For now.</p>
+<p><img src="Images/tut16c.gif" alt="T16C"></p>
+<p><code>Character</code> alredy has a <code>height</code> variable. Delete it. Change the constructor to just do nothing with the height argument, ignore it.</p>
+<p>Inside the <code>Rect</code> getter, make two new local intgers: <code>width</code> and <code>height</code>. <code>width</code> is going to equal the current sprites width, divided by two. <code>height</code> is going to equal <code>width</code>. Return a rectangle at <code>Positon`, with a size of</code>width<code>,</code>height```. The if statement in here is no longer needed.</p>
+<p>The <code>Center</code> getter already uses the <code>Rect</code> getter, there is nothing to change here.</p>
+<p>In the <code>Corners</code> getter, change w to equal <code>Rect.Width</code> and h to equal <code>Rect.Height</code></p>
+<p>Lastly, there is a reference to the old <code>height</code> variable inside of the <code>Render</code> function. Change the line to subtract <code>Rect.Height</code> instead of the old member. Also, because the if statment this is in no longer makes sense, change it to:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (SpriteSources[currentSprite][currentFrame].Height &gt; Rect.Height) {
+</code></pre>
+<p><strong>Run the game</strong>, walking around and collision should be working pretty well. Especially in overhead view:</p>
+<p><img src="Images/side_by_side.png" alt="COMPARE"></p>
+<h3 id="rendering-artifacts">Rendering artifacts</h3>
+<p>We have a few rendering artifacts going on. The most obvious of which is the bits of tile that render above the character. This happens becuase what gets written into the depth buffer is a square. Even if a diamond is rendered to the clor buffer, a square is rendered to the depth buffer.</p>
+<p>This square ends up putting pixels where they are not supposed to go! Open up <strong>GraphicsManager.cs</strong>, go to the <code>Initialize</code> function, and there are two lines commetned out:</p>
+<ul>
+<li><code>GL.AlphaFunc(AlphaFunction.Greater, 0.1f);</code></li>
+<li><code>GL.Enable(EnableCap.AlphaTest);</code></li>
+</ul>
+<p>Go ahead and comment these two lines back in, they will make it so alpha (transparent) pixels don&apos;t get written into the depth buffer.</p>
+<p>The next issue is that the character does not line up to the grid!</p>
+<p><img src="Images/collision_error.png" alt="ERROR"></p>
+<p>This is not an easy one to fix. The issue is our player sprite uses it&apos;s middle left as a registration point right now. But in an isometric view, everything needs to be modeled relative to a tile. Look at this picture again:</p>
+<p><img src="Images/tut16c.gif" alt="T16C"></p>
+<p>The + on the left marks the registration point, it&apos;s the top left for the floor tile. BUT, it also marks the registration point for the player! Notice how the players registration point doesn&apos;t actually touch the sprite! </p>
+<p>So how do we figure out how much space we need to offset the player by? Looking at the picture, it&apos;s <code>(TileCenter - TileW * 0.5) - (PlayerCenter - PlayerW * 0.5)</code> Doing the math with our known numbers, that comes out to about <strong>25</strong>.</p>
+<p>You could calculate this at runtime, to support different size enemies, but we&apos;re just going to keep it simple. So, where to apply this offset? In <strong>Character.cs</strong>, the <code>Render</code> function. Find where the <code>renderPosition</code> is projected into isometric space. Directly after that add 25 to it&apos;s X component!</p>
+<p>There is one last bug. If you walk into an obstacle from the X direction you will first be behind it, but then quickly pop in front of it! We have to offset the X position of the player by 1 pixel just like we did the Y position of the player. Look at the top of the <code>Render</code> function in <strong>Character.cs</strong>, and offset X by 1 the same way Y is offset by 1.</p>
+<p><strong>Run the game</strong>, everything should now work in an isometric environment. Your character can walk around, collide with walls and even enemies. As an adde bonus, the walls even have height to them!</p>
+
                     
                     </section>
                 
