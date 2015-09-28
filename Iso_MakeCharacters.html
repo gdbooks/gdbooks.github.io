@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="17.2" data-basepath="." data-revision="Sun Sep 27 2015 07:44:13 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="17.2" data-basepath="." data-revision="Mon Sep 28 2015 01:32:14 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -604,7 +604,7 @@
                         
                             <b>17.3.</b>
                         
-                        X Items &amp; Projectiles
+                        Items &amp; Projectiles
                     </a>
             
             
@@ -821,7 +821,7 @@
 <p>In the <code>Render</code> function find where offsetPosition.X and Y are hard coded. Wrap that bit of code in an if statment, we only want to hard code the X and Y if <code>ViewWorldSpace</code> is <strong>false</strong></p>
 <p>Next, let&apos;s undo the isometric projection. In <strong>Map.cs</strong> find the  <code>CartToIso</code> and <code>IsoToCart</code> functions. If <code>Game.ViewWorldSpace</code> is true, return the arguments without any modification.</p>
 <p>Last, we need to make a slight modification to the rendering code of <strong>Tile.cs</strong>. If <code>Game.ViewWorldSpace</code> is true, Draw a rectangle. The Location of the rectangle is going to be <code>WorldPosition</code>, while it&apos;s size is going to be 69 x 70. (69 is 1/2 the width of each tile, 70 is the height of each tile). Thse are the numbers we set up in the constructor of <strong>Map.cs</strong> for the size and position of tiles. If <code>Game.ViewWorldSpace</code> is false, render everything as usual.</p>
-<p>Further more, when <code>```Game.ViewWorldSpace</code> is true and we render a rectangle, if the tile is walkable render the rectangle in <code>Color.LightSteelBlue</code>, otherwise render it in <code>Color.LightSlateGray</code>.</p>
+<p>Further more, when <code>Game.ViewWorldSpace</code> is true and we render a rectangle, if the tile is walkable render the rectangle in <code>Color.LightSteelBlue</code>, otherwise render it in <code>Color.LightSlateGray</code>.</p>
 <p><strong>Run the game</strong> and toggle the display. Your non-isometric world view should look like this:</p>
 <p><img src="Images/non_iso.PNG" alt="NON_ISO"></p>
 <h3 id="no-more-30">No more 30</h3>
@@ -895,7 +895,7 @@
         <a href="./Iso_MakeMap.html" class="navigation navigation-prev " aria-label="Previous page: Map"><i class="fa fa-angle-left"></i></a>
         
         
-        <a href="./Iso_MakeItems.html" class="navigation navigation-next " aria-label="Next page: X Items &amp; Projectiles"><i class="fa fa-angle-right"></i></a>
+        <a href="./Iso_MakeItems.html" class="navigation navigation-next " aria-label="Next page: Items &amp; Projectiles"><i class="fa fa-angle-right"></i></a>
         
     </div>
 </div>

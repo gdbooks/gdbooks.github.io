@@ -39,13 +39,15 @@ namespace GameFramework {
 
         private float zNear = -1.0f;
         private float zFar = 1.0f;
-        private float depthStepValue = 0.05f;
+        private float depthStepValue = 0.0005f;
+
+        private float numberOfSprites = 1000;
 
         // http://stackoverflow.com/questions/24266815/render-the-depth-buffer-in-opengl-without-shaders
         public Image GetDepthBuffer() {
             List<byte> bgra = new List<byte>();
             float[] pixels = new float[game.ClientSize.Width * game.ClientSize.Height];
-            
+
 
             GL.ReadPixels<float>(0, 0, game.ClientSize.Width, game.ClientSize.Height, OpenTK.Graphics.OpenGL.PixelFormat.DepthComponent, PixelType.Float, pixels);
 
@@ -71,7 +73,7 @@ namespace GameFramework {
                 pixels[i] = (pixels[i] - min) / (max - min);
 
                 float depthComponent = Math.Min(1.0f, Math.Max(0.0f, pixels[i]));
-                byte colorComponent = System.Convert.ToByte(depthComponent *255.0f);
+                byte colorComponent = System.Convert.ToByte(depthComponent * 255.0f);
 
                 bgra.Add(colorComponent);
                 bgra.Add(colorComponent);
@@ -97,6 +99,7 @@ namespace GameFramework {
         public void SetDepthRange(float near, float far) {
             zNear = near;
             zFar = far;
+            depthStepValue = (zFar - zNear) / numberOfSprites;
         }
 
         public float Depth {
@@ -132,6 +135,7 @@ namespace GameFramework {
             lastClear = Color.CadetBlue;
             game = window;
             currentDepth = zNear;
+            depthStepValue = (zFar - zNear) / numberOfSprites;
             depthStep = depthStepValue;
 
             GL.Enable(EnableCap.Texture2D);
@@ -141,8 +145,8 @@ namespace GameFramework {
             GL.Enable(EnableCap.DepthTest);
             GL.ClearColor(Color.CadetBlue);
 
-            //GL.AlphaFunc(AlphaFunction.Greater, 0.1f);
-            //GL.Enable(EnableCap.AlphaTest);
+            GL.AlphaFunc(AlphaFunction.Greater, 0.1f);
+            GL.Enable(EnableCap.AlphaTest);
 
             fontHandle = GetFontTexture();
 
@@ -319,7 +323,7 @@ namespace GameFramework {
                 texcoords[count * 2 * 4 + 1] = 0.0f;
                 vertices[vertex++] = position.X + charWidth * count;
                 vertices[vertex++] = position.Y + charHeight;
-                vertices[vertex++] = Depth ;
+                vertices[vertex++] = Depth;
                 texcoords[count * 2 * 4 + 2] = charPieceX * (str[count] - 32);
                 texcoords[count * 2 * 4 + 3] = (float)originalH / (float)fontHeight;
                 vertices[vertex++] = position.X + charWidth * (count + 1);
