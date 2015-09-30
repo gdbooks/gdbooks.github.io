@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>X Mouse To Move | Introduction</title>
+        <title>Mouse To Move | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -36,7 +36,7 @@
     <body>
         
         
-    <div class="book" data-level="18" data-basepath="." data-revision="Mon Sep 28 2015 01:32:14 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="18" data-basepath="." data-revision="Wed Sep 30 2015 01:50:35 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -624,7 +624,7 @@
                         
                             <b>18.</b>
                         
-                        X Mouse To Move
+                        Mouse To Move
                     </a>
             
             
@@ -810,7 +810,79 @@
                 
                     <section class="normal" id="section-">
                     
-                        <h1 id="chapter-24-mouse-to-move">Chapter 24 - Mouse To Move</h1>
+                        <h1 id="mouse-to-move">Mouse To Move</h1>
+<p>Using the mouse to move will involve some rudimentary pathfinding / AI. We&apos;re going to implement the simplest path-finding possible. Usually, when doing a mouse to move you would use the A* algorithm to find the shortest path, however i have that lesson planned for later.</p>
+<h3 id="new-project">New Project</h3>
+<p>Let&apos;s make a new project, call it <strong>MouseToMove</strong> and get this project up to par with the <strong>OpenTheDoor</strong> section of the writeup. We&apos;re going to work from here.</p>
+<p>We don&apos;t care about items, enemies or bullets. We just want to be able to walk around with a mouse. And i&apos;m hoping this means typing a little less boiler plate code.</p>
+<h3 id="tile-size">Tile Size</h3>
+<p>We are starting off from a state before we did the tile size refactor in the isometric section (obviously), but i don&apos;t like having 30 all over the place. I made a new <code>public static readonly</code> variable in <strong>Game.cs</strong> called <code>TILE_SIZE</code> and refactored the rest of the project to use this instead of the hard coded 30</p>
+<p>You can keep hard coding 30, or do this refactor too, it&apos;s up to you. For the remainder of this article i&apos;m going to be refering to the size of the tile by this new constant in <strong>Game.cs</strong></p>
+<h3 id="mouse-indicator">Mouse Indicator</h3>
+<p>Clicking on tiles is usually obvious enough, but having a mouse indicator is always a nice touch. We&apos;re going to figure out which tile the mouse is over and highlight it with a red outline.</p>
+<p>In <strong>Game.cs</strong>, make a new <code>Point</code> variable, call it <code>cursorTile</code>. In Update, we&apos;re going to set this. Set it to the tile that the mouse is on. Because our tiles are based on a grid of 30, if a mouse is at 45,67 it&apos;s tile would be 2,3.</p>
+<p>In the render function, go ahead and draw a red rectangle around the selected tile. Remember to bring the tile from &quot;tile space&quot; back into &quot;world space&quot;. We don&apos;t have a method to draw a square outline, you will have to do it with 4 lines. Here is what this should look like:</p>
+<p><img src="Images/tile_select.png" alt="SELECT"></p>
+<p><strong>Note:</strong> Right now you probably just divided the mouse position X and Y by tile size, that should work very well for this demo. Be aware however, if you add scrolling, you will have to account for the scrolling offset in the mouse position!</p>
+<h3 id="target-location">Target location</h3>
+<p>Inside <strong>PlayerCharacter.cs</strong> make a new variable:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">protected</span> Point targetTile = <span class="hljs-keyword">new</span> Point(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>);
+</code></pre>
+<p>This variable represents the tile we want to walk to (in tile space). Publicly, we don&apos;t need any way to see the value of the variable, but we do need a way to set it. Let&apos;s add a setter function:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SetTargetTile</span>(<span class="hljs-params">Point target</span>) </span>{
+    targetTile = <span class="hljs-keyword">new</span> Point(target.X, target.Y);
+}
+</code></pre>
+<p>Next, in the <code>Update</code> method, after getting a local input manager instance, find the tile that the player is currently in:</p>
+<pre><code class="lang-cs">Point currentTile = <span class="hljs-keyword">new</span> Point((<span class="hljs-keyword">int</span>)(Position.X) / Game.TILE_SIZE, (<span class="hljs-keyword">int</span>)Position.Y / Game.TILE_SIZE);
+</code></pre>
+<h3 id="broad-phase-movement">Broad phase movement</h3>
+<p>At this point we know the current tile of the player and the target tile of the player. We also have code to move the player on screen with the keyboard. What we need to do is to change the movement conditions.</p>
+<p>Instead of looking at the keyboard, the movement conditions should look at the current and target tiles of the player.For example, if player tile is 5, but target tile is 2 the player should just move left!</p>
+<p>Change this line:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (i.KeyDown(OpenTK.Input.Key.A) || i.KeyDown(OpenTK.Input.Key.Left)) {
+</code></pre>
+<p>to this:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (targetTile.X &lt; currentTile.X) {
+</code></pre>
+<p>And this line</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">else</span> <span class="hljs-title">if</span> (<span class="hljs-params">i.KeyDown(OpenTK.Input.Key.D</span>) || i.<span class="hljs-title">KeyDown</span>(<span class="hljs-params">OpenTK.Input.Key.Right</span>)) </span>{
+</code></pre>
+<p>to this:</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">else</span> <span class="hljs-title">if</span> (<span class="hljs-params">targetTile.X &gt; currentTile.X</span>) </span>{
+</code></pre>
+<p>Chang the up and down if statements on your own. We call this broad phase movement, because it gets the player to the correct tile, not the correct pixel. We will add narro phase movement soon.</p>
+<h3 id="hook-it-up">Hook it up</h3>
+<p>In <strong>Game.cs</strong>, set the players target tile if a tile is clicked. We only want to set this target if the tile being clicked is walkable:</p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (InputManager.Instance.MousePressed(OpenTK.Input.MouseButton.Left)) {
+    <span class="hljs-keyword">if</span> (currentMap[cursorTile.Y][cursorTile.X].Walkable) {
+        hero.SetTargetTile(cursorTile);
+    }
+}
+</code></pre>
+<p><strong>Run the game</strong>, clicking around the map should cause the hero to walk to the selected tile! There are two problems. First, when you are behind a blocking tile and you click straight ahead the player will just forever walk into the obstacle. This is just dumb ai. We are not going to fix that in this lesson.</p>
+<p>The second, and perhaps more glaring issue is that the player is ok walking right or down. However walking left or up the player stops just one tile short of the target. This is because our registration point is in the top left of the character and the top left pixel is in the target tile already.</p>
+<h3 id="narrow-phase-movement">Narrow phase movement</h3>
+<p>The only way to solve our hero stopping one tile short is to add more fine grained collision controls. The <code>if</code> / <code>else if</code> for x movement, we&apos;re going to add another <code>else if</code> to that. </p>
+<p>This new else if checks how far the player is from the target x / y position (pixel, not tile). If he is close enough, he will be snapped to the pixel, if not he will just continue moving towards it.</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">else</span> <span class="hljs-title">if</span> (<span class="hljs-params">Position.X != currentTile.X</span>) </span>{
+    <span class="hljs-comment">// More than two pixels away, walk</span>
+    <span class="hljs-keyword">if</span> (Math.Abs(Position.X - currentTile.X * Game.TILE_SIZE) &gt; <span class="hljs-number">2</span>) {
+        SetSprite(<span class="hljs-string">&quot;Left&quot;</span>);
+        Animate(deltaTime);
+        Position.X -= speed * deltaTime;
+    }
+    <span class="hljs-comment">// Two pixels away, snap!</span>
+    <span class="hljs-keyword">else</span> {
+        Position.X = currentTile.X * Game.TILE_SIZE;
+    }
+}
+</code></pre>
+<p>Dont forget to do the same thing for the y axis! <strong>Run the game</strong>, clicking around, link should always walk to the right tile. Evenif he takes a dumb route.</p>
+<h3 id="doors">Doors</h3>
+<p>Now clicking aroudn moves us correctly, but what happens if you walk into a door? You try to walk to the door tile on the next map! This needs to get fixed.</p>
+<p>Find the code that makes the hero walk trough a door and shows the new room. In that code, set the heros target tile to be right outside the door (the specified target position). That should cuase the player to just switch rooms.</p>
+<p>I purposley left the instructions for that last part very vague. I want you to think about this, look at your code and try to solve the problem yourself. If you need any help or guidance i&apos;m aways here.</p>
 
                     
                     </section>
