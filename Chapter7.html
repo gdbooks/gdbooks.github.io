@@ -5,7 +5,7 @@
         
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>X More Tiles | Introduction</title>
+        <title>More Tiles | Introduction</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="generator" content="GitBook 2.3.0">
@@ -26,7 +26,7 @@
     
     
     
-    <link rel="prev" href="./Chapter30.html" />
+    <link rel="prev" href="./Chapter24.html" />
     
 
         
@@ -34,7 +34,7 @@
     <body>
         
         
-    <div class="book" data-level="23" data-basepath="." data-revision="Wed Sep 30 2015 01:50:35 GMT-0700 (Pacific Daylight Time)">
+    <div class="book" data-level="19" data-basepath="." data-revision="Thu Oct 01 2015 00:09:44 GMT-0700 (Pacific Daylight Time)">
     
 
 <div class="book-summary">
@@ -628,76 +628,16 @@
             
         </li>
     
-        <li class="chapter " data-level="19" data-path="Chapter25.html">
-            
-                
-                    <a href="./Chapter25.html">
-                
-                        <i class="fa fa-check"></i>
-                        
-                            <b>19.</b>
-                        
-                        X Iso Mouse
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter " data-level="20" data-path="Chapter26.html">
-            
-                
-                    <a href="./Chapter26.html">
-                
-                        <i class="fa fa-check"></i>
-                        
-                            <b>20.</b>
-                        
-                        X Iso Scroll
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter " data-level="21" data-path="Chapter29.html">
-            
-                
-                    <a href="./Chapter29.html">
-                
-                        <i class="fa fa-check"></i>
-                        
-                            <b>21.</b>
-                        
-                        X Slopes
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter " data-level="22" data-path="Chapter30.html">
-            
-                
-                    <a href="./Chapter30.html">
-                
-                        <i class="fa fa-check"></i>
-                        
-                            <b>22.</b>
-                        
-                        X Hexagons
-                    </a>
-            
-            
-        </li>
-    
-        <li class="chapter active" data-level="23" data-path="Chapter7.html">
+        <li class="chapter active" data-level="19" data-path="Chapter7.html">
             
                 
                     <a href="./Chapter7.html">
                 
                         <i class="fa fa-check"></i>
                         
-                            <b>23.</b>
+                            <b>19.</b>
                         
-                        X More Tiles
+                        More Tiles
                     </a>
             
             
@@ -809,7 +749,59 @@
                     <section class="normal" id="section-">
                     
                         <h1 id="more-tiles">More Tiles</h1>
-<p>In all of our examples we have loaded tiles by hand. We did breafly look at how to use tools to generate some understandable data, but it only goes so far. Let&apos;s leave off with an easy to parse map format. In this chapter we&apos;re going to load and save maps.</p>
+<p>In all of our examples we have loaded tiles by hand. We did breafly look at how to use tools to generate some understandable data, but it only goes so far. Let&apos;s leave off with an easy to parse map format. In this chapter we&apos;re going to load maps.</p>
+<h3 id="define-a-format">Define a format</h3>
+<p>I want you to come up with a map format! Each map will contain ONLY 1 room. Door tiles can go to other maps, how you represent those maps is up to you (By number, by string, or by whatever).</p>
+<p>Here is what a format <em>might</em> look like:</p>
+<pre><code>1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 0 3 3 3 0 0 0 0 0 0 0 0 0 1
+1 0 3 3 3 0 3 3 3 3 3 3 3 0 1
+1 0 0 0 0 0 3 3 0 0 0 0 3 0 1
+1 0 3 3 3 0 3 3 3 0 3 3 3 0 1
+1 0 3 3 3 0 0 0 0 0 0 0 0 0 2
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+
+T Assets/TileSheet.png
+R 0 23 87 98
+R 1 23 87 98
+R 2 23 87 98
+R 3 23 87 98
+W 0 2
+D 2 Assets/NextRoom.txt
+S 2 1
+</code></pre><p>I assume NO HEIGHT in my map format. In this hypothetical format, blank lines are skipped. Any line that begins with a number records a row. Any line that starts with a letter starts some meta-data. Here is my meta data format:</p>
+<ul>
+<li><strong>T</strong> [Path]<ul>
+<li>Specifies where the texture for this sheet is loaded</li>
+</ul>
+</li>
+<li><strong>R</strong> [index] [x] [y] [w] [h]<ul>
+<li>Specifies the source rectangle  </li>
+<li>index - which tile are we specifying the source of (0, 1, 2...)</li>
+<li>x, y, w, h - rectangle size</li>
+</ul>
+</li>
+<li><strong>W</strong> [index list]<ul>
+<li>Specifies which tiles are walkable</li>
+<li>Takes a list of integers, any integer in the list is walkable</li>
+</ul>
+</li>
+<li><strong>D</strong> [Index] [Path]<ul>
+<li>A door tile!</li>
+<li>The first argument is the index. In this map, tile 2 is a door</li>
+<li>The second argument is another map file! Load this map file when the door is entered</li>
+</ul>
+</li>
+<li><strong>S</strong> [x] [y]<ul>
+<li>Specifies the starting tile for this map.</li>
+<li>When the map first loads, place the hero here.</li>
+</ul>
+</li>
+</ul>
+<p>There is no requirement for this. You can include as many or as few items in your map as you want (You don&apos;t <em>have</em> to have doors unless you want to). Feel free to use my proposed format as a jumping off point.</p>
+<h3 id="loading-the-map">Loading the map</h3>
+<p>Right now we are hard coding the map layout into <strong>Game.cs</strong>, this needs to change. Change the constructor in <strong>Map.cs</strong> to take a single string for it&apos;s argument. This string should be the path of the map file to load. All map info needs to be in this file!</p>
+<p>You should craft a map file by hand, then modify the constructor of <code>Map</code> and try loading that file. </p>
 
                     
                     </section>
@@ -820,7 +812,7 @@
         </div>
 
         
-        <a href="./Chapter30.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: X Hexagons"><i class="fa fa-angle-left"></i></a>
+        <a href="./Chapter24.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Mouse To Move"><i class="fa fa-angle-left"></i></a>
         
         
     </div>
