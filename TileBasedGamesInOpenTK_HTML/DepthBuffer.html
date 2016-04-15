@@ -1,0 +1,861 @@
+<!DOCTYPE HTML>
+<html lang="en" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Depth Buffer | Introduction</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 2.4.3">
+        
+        
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
+        
+    <link rel="stylesheet" href="gitbook/style.css">
+    
+        
+        <link rel="stylesheet" href="gitbook/plugins/gitbook-plugin-highlight/website.css">
+        
+    
+    
+
+        
+    
+    
+    <link rel="next" href="./Chapter23.html" />
+    
+    
+    <link rel="prev" href="./AddingAHouse.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+    <div class="book" data-level="16.3" data-basepath="." data-revision="Fri Apr 15 2016 09:56:49 GMT-0700 (PDT)">
+    
+
+<div class="book-summary">
+    <div class="book-search" role="search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <nav role="navigation">
+        <ul class="summary">
+            
+            
+            
+            
+
+            
+
+            
+    
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="./index.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                        Introduction
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1" data-path="Chapter1.html">
+            
+                
+                    <a href="./Chapter1.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                        Starting Out
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.1" data-path="FrameworksSources.html">
+            
+                
+                    <a href="./FrameworksSources.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.1.</b>
+                        
+                        Managers
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="Game.html">
+            
+                
+                    <a href="./Game.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.2.</b>
+                        
+                        Game
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="Program.html">
+            
+                
+                    <a href="./Program.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.3.</b>
+                        
+                        Program
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="2" data-path="Chapter2.html">
+            
+                
+                    <a href="./Chapter2.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                        Why Tiles?
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="3" data-path="Chapter3.html">
+            
+                
+                    <a href="./Chapter3.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                        Map Format
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="4" data-path="Chapter6.html">
+            
+                
+                    <a href="./Chapter6.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                        Creating Tiles
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="4.1" data-path="Practice/PracticeCh6.html">
+            
+                
+                    <a href="./Practice/PracticeCh6.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                        On Your Own
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="5" data-path="Chapter5.html">
+            
+                
+                    <a href="./Chapter5.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                        Map Tools
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="6" data-path="Chapter8.html">
+            
+                
+                    <a href="./Chapter8.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                        The Hero
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="6.1" data-path="Practice/PracticeTheHero.html">
+            
+                
+                    <a href="./Practice/PracticeTheHero.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.1.</b>
+                        
+                        On Your Own
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="7" data-path="Chapter9.html">
+            
+                
+                    <a href="./Chapter9.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.</b>
+                        
+                        Keys To Move
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="7.1" data-path="Practice/PracticeMoving.html">
+            
+                
+                    <a href="./Practice/PracticeMoving.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>7.1.</b>
+                        
+                        On Your Own
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="8" data-path="Chapter10.html">
+            
+                
+                    <a href="./Chapter10.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>8.</b>
+                        
+                        Hit The Wall
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="9" data-path="Chapter11.html">
+            
+                
+                    <a href="./Chapter11.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>9.</b>
+                        
+                        Open The Door
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="9.1" data-path="cleanup.html">
+            
+                
+                    <a href="./cleanup.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>9.1.</b>
+                        
+                        Cleaning Up
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="9.2" data-path="borders.html">
+            
+                
+                    <a href="./borders.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>9.2.</b>
+                        
+                        Screen Borders
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="10" data-path="Chapter12.html">
+            
+                
+                    <a href="./Chapter12.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.</b>
+                        
+                        Jumping
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="10.1" data-path="jumpconfig.html">
+            
+                
+                    <a href="./jumpconfig.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>10.1.</b>
+                        
+                        Configurable Jumping
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="11" data-path="Chapter13.html">
+            
+                
+                    <a href="./Chapter13.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>11.</b>
+                        
+                        Clouds
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="12" data-path="Chapter15.html">
+            
+                
+                    <a href="./Chapter15.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>12.</b>
+                        
+                        Simple Enemy
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="13" data-path="Chapter17.html">
+            
+                
+                    <a href="./Chapter17.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>13.</b>
+                        
+                        Shooting
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="14" data-path="Chapter18.html">
+            
+                
+                    <a href="./Chapter18.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>14.</b>
+                        
+                        Getting Items
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="15" data-path="Chapter20.html">
+            
+                
+                    <a href="./Chapter20.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>15.</b>
+                        
+                        Scrolling
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="15.1" data-path="Chapter21.html">
+            
+                
+                    <a href="./Chapter21.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>15.1.</b>
+                        
+                        Limit Scrolling
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="16" data-path="Chapter22.html">
+            
+                
+                    <a href="./Chapter22.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>16.</b>
+                        
+                        Depth
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="16.1" data-path="SpeerateCollisionAndRendering.html">
+            
+                
+                    <a href="./SpeerateCollisionAndRendering.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>16.1.</b>
+                        
+                        Collision &amp; Rendering
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="16.2" data-path="AddingAHouse.html">
+            
+                
+                    <a href="./AddingAHouse.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>16.2.</b>
+                        
+                        Visual Tweaks
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter active" data-level="16.3" data-path="DepthBuffer.html">
+            
+                
+                    <a href="./DepthBuffer.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>16.3.</b>
+                        
+                        Depth Buffer
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="17" data-path="Chapter23.html">
+            
+                
+                    <a href="./Chapter23.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.</b>
+                        
+                        Ismetric View
+                    </a>
+            
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="17.1" data-path="Iso_MakeMap.html">
+            
+                
+                    <a href="./Iso_MakeMap.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.1.</b>
+                        
+                        Map
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="17.2" data-path="Iso_MakeCharacters.html">
+            
+                
+                    <a href="./Iso_MakeCharacters.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.2.</b>
+                        
+                        Characters
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="17.3" data-path="Iso_MakeItems.html">
+            
+                
+                    <a href="./Iso_MakeItems.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>17.3.</b>
+                        
+                        Items &amp; Projectiles
+                    </a>
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="18" data-path="Chapter24.html">
+            
+                
+                    <a href="./Chapter24.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>18.</b>
+                        
+                        Mouse To Move
+                    </a>
+            
+            
+        </li>
+    
+        <li class="chapter " data-level="19" data-path="Chapter7.html">
+            
+                
+                    <a href="./Chapter7.html">
+                
+                        <i class="fa fa-check"></i>
+                        
+                            <b>19.</b>
+                        
+                        More Tiles
+                    </a>
+            
+            
+        </li>
+    
+
+
+            
+            <li class="divider"></li>
+            <li>
+                <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+                    Published with GitBook
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header" role="navigation">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Table of Contents"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Font Settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Share"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">
+                    Share on Twitter
+                </button>
+                <button type="button" data-sharing="google-plus" class="button">
+                    Share on Google
+                </button>
+                <button type="button" data-sharing="facebook" class="button">
+                    Share on Facebook
+                </button>
+                <button type="button" data-sharing="weibo" class="button">
+                    Share on Weibo
+                </button>
+                <button type="button" data-sharing="instapaper" class="button">
+                    Share on Instapaper
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Google"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+    
+
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="./" >Introduction</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1" role="main">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-">
+                    
+                        <h1 id="z-buffer">Z-Buffer</h1>
+<p>The concept of a <a href="https://en.wikipedia.org/wiki/Z-buffering" target="_blank">Z buffer</a> is pretty simple. Everything in the game has thre component coordinates: x, y and z. The game has two buffers, a color buffer and a depth buffer. When you try to draw something, the first thing that happens is the z value is written to the depth buffer. The depth buffer is a black and white image, low z values are black, high z values are white. </p>
+<p>So, the z value is written to the z buffer, the thing is, not every pixel might be written to the z buffer! If the object is partially occluded (if the buffer has lighter pixels over a part of the object), then those values are not written to the z buffer. This is called rejecting the pixel. It&apos;s also called a z test.</p>
+<p>If a pixel fails the z test it is not written into the color buffer. If a pixel passes the z test, it is written into the color buffer.</p>
+<p>This is the general concept of a z-buffer. It&apos;s a pretty important concept, if you are having trouble with it give me a call and we can talk it oer.</p>
+<h3 id="new-project">New Project</h3>
+<p>Let&apos;s make a new project, call it <strong>DepthBuffer</strong> and get this project up to par with the <strong>VisualTweaks</strong> section of the writeup. We&apos;re going to work from here.</p>
+<h3 id="update-graphics-manager">Update Graphics Manager</h3>
+<p>GraphicsManager does not support all the functionality you need to get the project off the ground right now. You can fix this by grabing the latest manager <a href="https://raw.githubusercontent.com/gszauer/2DOpenTKFramework/master/2DFramework/Framework/GraphicsManager.cs" target="_blank">from my github</a> and pasting it into your file.</p>
+<h3 id="existing-depth-buffer">Existing Depth Buffer</h3>
+<p>The graphics frameworks is already using buffers under the hood. When you call <code>GraphicsManager.Instance.ClearScreen(System.Drawing.Color.CadetBlue);</code> in <strong>Program.cs</strong> the depth buffer is cleared to 0 (Pure white). </p>
+<p>Every sprite you draw renders as a quad. Each time you call <code>GraphicsManager.Instance.Draw[String/Square/Line]</code> or <code>TextureManager.Instance.Draw</code>  0.0005f is added to the depth, and the quad is rendered into the depth buffer with the new depth. The closer we get to 1, the darker the depth buffer.</p>
+<p>The depth test passes, and the colors of the quad are drawn to screen.</p>
+<p>Right now the depth test will always pass! This is becuase each time a new quad is rendered it is rendered with a z valu 0.0005f higher than the last one. That is, nothing in the depth buffer will have a higher value (be darker) than the current thing being drawn.</p>
+<p>Here is a screenshot of what our z buffer looks like. Notice how the tiles get darker not only going from top to bottom, but also left to right.</p>
+<p><img src="Images/buffers.PNG" alt="BUFFERS"></p>
+<p>Just for fun, if you want to see the z-buffer for your self, you can add this code to <strong>Game.cs</strong></p>
+<pre><code class="lang-cs"><span class="hljs-keyword">if</span> (InputManager.Instance.KeyPressed(OpenTK.Input.Key.Y)) {
+    Image depthBuffer = GraphicsManager.Instance.GetDepthBuffer();
+    depthBuffer.Save(<span class="hljs-string">&quot;depth_buffer.png&quot;</span>, System.Drawing.Imaging.ImageFormat.Png);
+}
+</code></pre>
+<p>With this code in place, every time you press the <strong>Y</strong> button the depth buffer will be saved next to the Asets directory and solution file.</p>
+<h3 id="explicit-depth-buffer">Explicit Depth Buffer</h3>
+<p>The task at hand is to figure out how to sort tiles, enemies, characters and items; then to apply Z values directly. Right now we don&apos;t have controll of the z buffer directly, which is why i updated the Graphics manager with the following functions</p>
+<pre><code class="lang-cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SetDepthRange</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> near, <span class="hljs-keyword">float</span> far</span>)
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">IncreaseDepth</span>(<span class="hljs-params"></span>)
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">IncreaseDepth</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> step</span>)
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">SetDepth</span>(<span class="hljs-params"><span class="hljs-keyword">float</span> depth</span>)
+</span></code></pre>
+<ul>
+<li><strong>SetDepthRange</strong> - Unlike the X and Y axis, our depth is not infinite! We need to define a range for it<ul>
+<li>Takes a near value and a far value. Configures depth buffer to use said values</li>
+</ul>
+</li>
+<li><strong>IncreaseDepth</strong> - This is what GraphicsManager has been using internally this whole time.<ul>
+<li>Increases current depth by 0.0005f </li>
+</ul>
+</li>
+<li><strong>IncreaseDepth(float)</strong> - The stock increase might not be enough. We may want to increase depth in smaller steps<ul>
+<li>Increases depth by the value of the argument provided </li>
+</ul>
+</li>
+<li><strong>SetDepth</strong> - Increase depth can only go forward, we may need to set depth to 3 after it was 5<ul>
+<li>Allows us to hard code the depth value for the next draw call</li>
+</ul>
+</li>
+</ul>
+<p>Out of all these functions, we only need SetDepth. Before rendering a tile or the character or anything we&apos;re going to explicitly set it&apos;s z-depth by calling <strong>SetDepth</strong>. This way we can be in total controll! The only question is, how to we figure out the depth of a thing (tile, character, item, etc...)??? Oh, and what resolution depth buffer do we need?</p>
+<p>The image of the depth buffer we saw in the last section on this page actually gives us a pretty decent strategy for dealing with depth. The further down something is the higher it&apos;s depth. The further right something is, the higher it&apos;s depth!</p>
+<p>Here is what i propose. We will pick two numbers, one for the maximum height we might render and one for the maximum width we might render. For demonstration purposes, lets say height of 6, width of 7. Our depth range is going to be height <em> width + 1 or 6 </em> 7 + 1. The depth of each indevidual tile? <strong>y * 7 + x</strong>. 7 being the width. This ensures that each row starts on a multiple of 7, and we just increase on the way up.</p>
+<p>Here is a visual demonstration using a height of 8 and a width of 10 (even tough only a width of 8 is displayed). It&apos;s ok to have extra tiles, a little saftey padding never hurt anybody.</p>
+<p><img src="Images/index_grid.png" alt="GRID"></p>
+<p>Here is another example of what we are trying to do:</p>
+<p><img src="Images/flatten_array.png" alt="EXAMPLE"></p>
+<h3 id="real-world-values">Real World Values</h3>
+<p>So now that we know how to get the depth of each tile, and the depth range, what should it be for our game?!?!? Take a look at the <strong>Render</strong> function of <strong>Map.cs</strong> our width rendering ranges from -8 to +8, and our height rendering ranges from -6 to + 6. We also add one extra tile (the + 30) for padding. This means we have 17 tiles accross and 13 tiles up and down. </p>
+<p>Let&apos;s round those numbers up to the nearest ten. Make the <strong>depth range = 0, 21 x 21</strong>. The depth function for each tile is going to be <strong>y * 20 + x</strong>. Wait, whats the extra 1 for? We did 21 x 21 but are only calculating with 20.... That extra 1 is padding. It&apos;s a good idea to add a little bit.</p>
+<p>Set the depth range in the Initialize function of <strong>Game.cs</strong></p>
+<h3 id="implementation">Implementation</h3>
+<p><strong>Hint</strong>: all depth should be set based on <strong>WORLD SPACE</strong>, not camera space.</p>
+<p>I&apos;m going to leave implementation a little bit open ended. I&apos;ll make suggestions on where to call the <strong>SetDepth</strong> function, but you are welcome to call it anywhere.</p>
+<p><strong>For Tiles</strong>, set the depth for each tile in <strong>Map.cs</strong>, right before calling <code>tileMap[h][w].Render(offsetPosition)</code>. You can easily find the depth by doing <code>h * 20 + w</code></p>
+<p><strong>For Characters</strong>, in the <code>Render</code> function of <strong>Character.cs</strong>. Set the depth based on the Bottom Right corner of the character. Remember, the bottom right is not measured in tiles, so you have to convert it to tiles.</p>
+<p><strong>Hint</strong>, Bottom right is misleading. When the players collision is corrected, technically his bottom right is one tile lower than what we want to be checking. Adjust Y by 1 pixel up, like so: <code>((int)Corners[CORNER_BOTTOM_RIGHT].Y - 1)</code> that way you get the exact foot tile!</p>
+<p><strong>Hint</strong>, add 0.5 to the depth to ensure that the player renders on top of the tiles. Like this <code>GraphicsManager.Instance.SetDepth(y_tile * 20 + x_tile + 0.5f)</code>, that tiny boost just makes sure that we are rendered on top of the current tile.</p>
+<p><strong>Run the game</strong>, you should be able to walk around. Notice how your character can walk below the roof of the house and above the obstacles:</p>
+<p><img src="Images/zdepth.png" alt="Z_DEPTH"></p>
+<p><strong>For Items</strong> Do the same thing you did for the player. Instead of adding 0.5f to it, add an offset of 0.2f</p>
+<p><strong>For Projectiles</strong>, in <strong>Game.cs</strong> find where you render each projectile with <code>projectiles[i].Render(offsetPosition);</code> and before that set the depth to 19*19. We set it super high because these projectiles should be rendering above everything!</p>
+<p>Lastly, in <strong>Game.cs</strong> before hte game over check (this line): <code>if (GameOver) {</code> make sure to set the depth to <strong>20*20</strong>, to make sure that all game over text renders above the game</p>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="./AddingAHouse.html" class="navigation navigation-prev " aria-label="Previous page: Visual Tweaks"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="./Chapter23.html" class="navigation navigation-next " aria-label="Next page: Ismetric View"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="gitbook/app.js"></script>
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>
